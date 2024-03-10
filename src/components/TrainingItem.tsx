@@ -1,5 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native'
 
+const FONTSIZE = 15
+
 export const TrainingItem = (): JSX.Element => {
   return (
     <View>
@@ -9,27 +11,15 @@ export const TrainingItem = (): JSX.Element => {
 
       <View>
         <View style={styles.itemCount}>
-          <View style={styles.itemCountNum}>
-            <Text style={styles.itemCountNumValue}>1</Text>
-          </View>
-          <View style={styles.itemCountWeight}>
-            <Text style={styles.itemCountWeightValue}>100kg</Text>
-          </View>
-          <View style={styles.itemCountSet}>
-            <Text style={styles.itemCountSetValue}>2回</Text>
-          </View>
+          <Text style={styles.itemCountNum}>1</Text>
+          <Text style={styles.itemCountWeight}>100 kg</Text>
+          <Text style={styles.itemCountSet}>7 回</Text>
         </View>
 
         <View style={styles.itemCount}>
-          <View style={styles.itemCountNum}>
-            <Text style={styles.itemCountNumValue}>2</Text>
-          </View>
-          <View style={styles.itemCountWeight}>
-            <Text style={styles.itemCountWeightValue}>80kg</Text>
-          </View>
-          <View style={styles.itemCountSet}>
-            <Text style={styles.itemCountSetValue}>7回</Text>
-          </View>
+          <Text style={styles.itemCountNum}>2</Text>
+          <Text style={styles.itemCountWeight}>80 kg</Text>
+          <Text style={styles.itemCountSet}>7 回</Text>
         </View>
 
       </View>
@@ -40,6 +30,7 @@ export const TrainingItem = (): JSX.Element => {
 const styles = StyleSheet.create({
   itemEvent: {
     marginHorizontal: 10,
+    marginBottom: 10,
     paddingVertical: 10,
     fontSize: 16,
     borderBottomWidth: 2,
@@ -48,25 +39,20 @@ const styles = StyleSheet.create({
   itemCount: {
     flexDirection: 'row',
     justifyContent: 'center',
-    padding: 15
+    paddingHorizontal: 10,
+    paddingBottom: 10
   },
   itemCountNum: {
-    width: '20%'
-  },
-  itemCountNumValue: {
+    width: '20%',
     fontWeight: 'bold',
-    fontSize: 18
+    fontSize: FONTSIZE
   },
   itemCountWeight: {
-    width: '35%'
-  },
-  itemCountWeightValue: {
-    fontSize: 18
+    width: '35%',
+    fontSize: FONTSIZE
   },
   itemCountSet: {
-    width: '30%'
-  },
-  itemCountSetValue: {
-    fontSize: 18
+    width: '30%',
+    fontSize: FONTSIZE
   }
 })

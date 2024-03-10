@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   itemPart: {
-    backgroundColor: '#94E1F2',
+    backgroundColor: '#9dcffa',
     padding: 10
   },
   itemPartTitle: {

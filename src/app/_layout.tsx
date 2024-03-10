@@ -5,26 +5,9 @@ const Layout = (): JSX.Element => {
   return (
     <Stack
       screenOptions={{
-        headerTitle: 'Muscle',
-        headerStyle: {
-          // backgroundColor: '#94E1F2'
-        }
+        headerTitle: ''
       }}
     >
-      <Stack.Screen
-        name='menu/menu'
-        options={{
-          headerTitle: 'Menu',
-          headerLeft: () => { return (<BackButton/>) }
-        }}
-      />
-      <Stack.Screen
-        name='create/createMenu'
-        options={{
-          presentation: 'modal',
-          headerLeft: () => { return (<BackButton/>) }
-        }}
-      />
       <Stack.Screen
         name='auth/loginMail'
         options={{
@@ -39,6 +22,20 @@ const Layout = (): JSX.Element => {
           presentation: 'modal',
           headerLeft: () => { return (<BackButton/>) },
           headerTitle: '新規登録'
+        }}
+      />
+      <Stack.Screen
+        name='menu/menu'
+        options={{
+          headerTitle: 'Menu',
+          headerLeft: () => { return (<BackButton/>) }
+        }}
+      />
+      <Stack.Screen
+        name='create/createMenu'
+        options={{
+          presentation: 'modal',
+          headerLeft: () => { return (<BackButton/>) }
         }}
       />
     </Stack>

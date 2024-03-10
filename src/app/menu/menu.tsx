@@ -1,7 +1,11 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { MaterialIcons, SimpleLineIcons } from '@expo/vector-icons'
 
+// components
+import { LogoutButton } from '../../components/LogoutButton'
+
 const COLOR = '#8C8C88'
+const FONTSIZE = 16
 
 const Menu = (): JSX.Element => {
   return (
@@ -13,6 +17,23 @@ const Menu = (): JSX.Element => {
         </View>
         <MaterialIcons name='arrow-forward-ios' size={20} color={COLOR}/>
       </TouchableOpacity>
+
+      <TouchableOpacity style={styles.item}>
+        <View style={styles.itemLeft}>
+          <SimpleLineIcons name='settings' size={20} style={styles.itemIcon}/>
+          <Text style={styles.itemName}>Setting</Text>
+        </View>
+        <MaterialIcons name='arrow-forward-ios' size={20} color={COLOR}/>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.item}>
+        <View style={styles.itemLeft}>
+          <SimpleLineIcons name='settings' size={20} style={styles.itemIcon}/>
+          <Text style={styles.itemName}>Setting</Text>
+        </View>
+        <MaterialIcons name='arrow-forward-ios' size={20} color={COLOR}/>
+      </TouchableOpacity>
+      <LogoutButton/>
     </View>
   )
 }
@@ -38,7 +59,7 @@ const styles = StyleSheet.create({
     width: 40
   },
   itemName: {
-    fontSize: 16
+    fontSize: FONTSIZE
   }
 })
 

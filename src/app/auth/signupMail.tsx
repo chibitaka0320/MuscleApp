@@ -3,24 +3,29 @@ import { useState } from 'react'
 import { View, Text, StyleSheet, TextInput, Alert } from 'react-native'
 
 // firebase
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../config'
 
 // components
 import { OblongButton } from '../../components/OblongButton'
 
 const handlePress = (email: string, password: string): void => {
-  signInWithEmailAndPassword(auth, email, password)
+  createUserWithEmailAndPassword(auth, email, password)
     .then(() => {
       router.back()
       router.replace('/home/training')
     })
-    .catch(() => {
-      Alert.alert('ログイン情報に誤りがあります')
+    .catch((error) => {
+      const { message } = error
+      if (message === 'Firebase: Error (auth/invalid-email).') {
+        Alert.alert('メールアドレスを正しく入力してください')
+      } else {
+        Alert.alert('パスワードを正しく入力してください')
+      }
     })
 }
 
-const LoginMail = (): JSX.Element => {
+const SignupMail = (): JSX.Element => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   return (
@@ -53,7 +58,7 @@ const LoginMail = (): JSX.Element => {
           </TextInput>
         </View>
         <OblongButton style={{ marginVertical: 40 }} onPress={() => { handlePress(email, password) }}>
-          ログイン
+          新規登録
         </OblongButton>
       </View>
     </View>
@@ -85,4 +90,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default LoginMail
+export default SignupMail

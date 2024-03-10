@@ -7,6 +7,10 @@ const login = (): void => {
   router.replace('auth/login')
 }
 
+const onMail = (): void => {
+  router.push('auth/signupMail')
+}
+
 const Signup = (): JSX.Element => {
   const nav = useNavigation()
   useEffect(() => {
@@ -17,7 +21,7 @@ const Signup = (): JSX.Element => {
   return (
     <View style={styles.container}>
       <View style={styles.signupContents}>
-        <OblongButton>
+        <OblongButton onPress={onMail}>
           メールアドレスで登録
         </OblongButton>
         <OblongButton>

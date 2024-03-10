@@ -33,7 +33,14 @@ const Layout = (): JSX.Element => {
           headerTitle: 'ログイン'
         }}
       />
-
+      <Stack.Screen
+        name='auth/signupMail'
+        options={{
+          presentation: 'modal',
+          headerLeft: () => { return (<BackButton/>) },
+          headerTitle: '新規登録'
+        }}
+      />
     </Stack>
   )
 }

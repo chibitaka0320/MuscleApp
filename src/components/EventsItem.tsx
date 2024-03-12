@@ -1,28 +1,29 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, FlatList } from 'react-native'
+import { type Events } from '../app/types/Training'
 
 const FONTSIZE = 15
 
-export const TrainingItem = (): JSX.Element => {
+interface Props {
+  data: Events
+}
+
+export const EventsItem = (props: Props): JSX.Element => {
+  const { data } = props
   return (
     <View>
       <View style={styles.itemEvent}>
-        <Text>ベンチプレス</Text>
+        <Text>{data.eventName}</Text>
       </View>
-
-      <View>
-        <View style={styles.itemCount}>
-          <Text style={styles.itemCountNum}>1</Text>
-          <Text style={styles.itemCountWeight}>100 kg</Text>
-          <Text style={styles.itemCountSet}>7 回</Text>
-        </View>
-
-        <View style={styles.itemCount}>
-          <Text style={styles.itemCountNum}>2</Text>
-          <Text style={styles.itemCountWeight}>80 kg</Text>
-          <Text style={styles.itemCountSet}>7 回</Text>
-        </View>
-
-      </View>
+      <FlatList
+        data={data.sets}
+        renderItem={({ item, index }) => (
+          <View style={styles.itemCount}>
+            <Text style={styles.itemCountNum}>{index + 1}</Text>
+            <Text style={styles.itemCountWeight}>{item.weight} kg</Text>
+            <Text style={styles.itemCountSet}>{item.set} 回</Text>
+          </View>
+        )}
+      />
     </View>
   )
 }

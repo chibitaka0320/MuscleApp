@@ -1,20 +1,52 @@
-import { View, Text, StyleSheet } from 'react-native'
-import { TrainingItem } from '../../components/TrainingItem'
+import { useEffect, useState } from 'react'
+import { View, StyleSheet, FlatList } from 'react-native'
 
-const Training = (): JSX.Element => {
+// firebase
+import { auth, db } from '../../config'
+import { collection, onSnapshot, query, where } from 'firebase/firestore'
+
+// types
+import { type Parts, type FirebaseTraining } from '../types/Training'
+
+// components
+import { PartsItem } from '../../components/PartsItem'
+import { FormData } from '../../components/FormData'
+
+interface Props {
+  date: string
+}
+
+const Training = (props: Props): JSX.Element => {
+  const { date } = props
+  const [trainingData, setTrainingData] = useState<Parts[]>()
+  useEffect(() => {
+    if (auth.currentUser === null) return
+    if (typeof date !== 'string') return
+    const ref = collection(db, `users/${auth.currentUser.uid}/training`)
+    const q = query(ref, where('date', '==', date))
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const getTraining: FirebaseTraining[] = []
+      snapshot.forEach((doc) => {
+        const { parts, events, set, weight } = doc.data()
+        getTraining.push({
+          id: doc.id,
+          parts,
+          events,
+          set,
+          weight
+        })
+      })
+      setTrainingData(FormData(getTraining))
+    })
+    return unsubscribe
+  }, [date])
+
   return (
     <View style={styles.container}>
-      <View>
-        <View style={styles.item}>
-
-          <View style={styles.itemPart}>
-            <Text style={styles.itemPartTitle}>胸</Text>
-          </View>
-
-          <TrainingItem/>
-        </View>
-
-      </View>
+       <FlatList
+        data={trainingData}
+        renderItem={({ item }) => <PartsItem data={item}/>}
+       />
     </View>
   )
 }
@@ -22,23 +54,6 @@ const Training = (): JSX.Element => {
 const styles = StyleSheet.create({
   container: {
     flex: 1
-    // backgroundColor: '#FFFFFF'
-  },
-  item: {
-    backgroundColor: '#FFFFFF',
-    marginHorizontal: 15,
-    marginVertical: 30,
-    // borderWidth: 0.5,
-    borderRadius: 5,
-    overflow: 'hidden'
-  },
-  itemPart: {
-    backgroundColor: '#9dcffa',
-    padding: 10
-  },
-  itemPartTitle: {
-    fontSize: 16,
-    fontWeight: 'bold'
   }
 })
 

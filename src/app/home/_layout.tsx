@@ -1,17 +1,22 @@
+// react
 import { useEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
+
+// navigator
 import { router, useNavigation } from 'expo-router'
-import { Entypo, Feather } from '@expo/vector-icons'
-import { WeekCalendar, CalendarProvider } from 'react-native-calendars'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 
 // components
 import { CircleButton } from '../../components/CircleButton'
 import { getNow } from '../../components/GetNowDate'
 
-// Screen
+// screen
 import Training from './training'
 import Eating from './eating'
+
+// other
+import { Entypo, Feather } from '@expo/vector-icons'
+import { WeekCalendar, CalendarProvider } from 'react-native-calendars'
 
 const Tab = createMaterialTopTabNavigator()
 const today = getNow()
@@ -45,27 +50,6 @@ const Layout = (): JSX.Element => {
         todayBottomMargin={100}
       >
         <WeekCalendar/>
-        {/* <Tabs
-          screenOptions={{
-            headerShown: false
-          }}
-        >
-          <Tabs.Screen
-            name="training"
-            options={{
-              title: '筋トレ',
-              tabBarIcon: ({ color }) => <FontAwesome5 size={24} name="dumbbell" color={color} />
-            }}
-            initialParams={{ date: today }}
-          />
-          <Tabs.Screen
-            name="eating"
-            options={{
-              title: '食事',
-              tabBarIcon: ({ color }) => <FontAwesome size={24} name="cutlery" color={color} />
-            }}
-          />
-        </Tabs> */}
         <Tab.Navigator>
           <Tab.Screen
             name='Training'

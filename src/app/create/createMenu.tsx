@@ -11,6 +11,9 @@ const onBody = (date: string): void => {
 const onTraining = (date: string): void => {
   router.replace({ pathname: '/create/createTraining', params: { date } })
 }
+const onEating = (date: string): void => {
+  router.replace({ pathname: '/create/createEat', params: { date } })
+}
 
 const createMenu = (): JSX.Element => {
   const { date } = useLocalSearchParams()
@@ -45,7 +48,14 @@ const createMenu = (): JSX.Element => {
         </View>
         <View>
           <Text style={styles.menuTitle}>食事</Text>
-          <CircleButton style={styles.circleButton}>
+          <CircleButton
+            style={styles.circleButton}
+            onPress={() => {
+              if (typeof date === 'string') {
+                onEating(date)
+              }
+            }}
+          >
             <MaterialIcons name='set-meal' size={30}/>
           </CircleButton>
         </View>

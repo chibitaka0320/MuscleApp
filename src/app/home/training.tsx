@@ -21,7 +21,6 @@ const Training = (props: Props): JSX.Element => {
   const [trainingData, setTrainingData] = useState<Parts[]>()
   useEffect(() => {
     if (auth.currentUser === null) return
-    if (typeof date !== 'string') return
     const ref = collection(db, `users/${auth.currentUser.uid}/training`)
     const q = query(ref, where('date', '==', date))
     const unsubscribe = onSnapshot(q, (snapshot) => {

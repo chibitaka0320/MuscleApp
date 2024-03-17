@@ -26,7 +26,7 @@ const circleButtonPress = (date: string): void => {
 
 const Layout = (): JSX.Element => {
   const navigation = useNavigation()
-  const [selectDate, setSelectDate] = useState(today)
+  const [selectDate, setSelectDate] = useState<string>(today)
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => {
@@ -47,7 +47,7 @@ const Layout = (): JSX.Element => {
         onDateChanged={(date: string) => {
           setSelectDate(date)
         } }
-        todayBottomMargin={100}
+        todayBottomMargin={75}
       >
         <WeekCalendar/>
         <Tab.Navigator>
@@ -55,16 +55,17 @@ const Layout = (): JSX.Element => {
             name='Training'
             options={{ tabBarLabel: 'トレーニング' }}
           >
-            {(props) => <Training date={selectDate}/>}
+            {() => <Training date={selectDate}/>}
           </Tab.Screen>
           <Tab.Screen
             name='Eating'
-            component={Eating}
             options={{ tabBarLabel: '食事' }}
-          />
+          >
+            {() => <Eating date={selectDate}/> }
+          </Tab.Screen>
         </Tab.Navigator>
       </CalendarProvider>
-      <CircleButton onPress={ () => { circleButtonPress(selectDate) } } style={{ position: 'absolute', right: 40, bottom: 110 }}>
+      <CircleButton onPress={ () => { circleButtonPress(selectDate) } } style={{ position: 'absolute', right: 40, bottom: 60 }}>
         <Entypo name='plus'size={40} />
       </CircleButton>
     </>

@@ -20,19 +20,23 @@ import { Dropdown } from 'react-native-element-dropdown'
 
 const handlePress = async (date: string, parts: string, events: string, weight: string, set: string): Promise<void> => {
   if (auth.currentUser === null) { return }
-  const ref = collection(db, `users/${auth.currentUser.uid}/training`)
-  try {
-    await addDoc(ref, {
-      date,
-      parts,
-      events,
-      weight,
-      set
-    })
-    router.back()
-    router.replace('home/training')
-  } catch {
-    Alert.alert('情報に誤りがあります')
+  if ((parts !== '' && events !== '' && weight !== '' && set !== '')) {
+    const ref = collection(db, `users/${auth.currentUser.uid}/training`)
+    try {
+      await addDoc(ref, {
+        date,
+        parts,
+        events,
+        weight,
+        set
+      })
+      router.back()
+      router.replace('home/training')
+    } catch {
+      Alert.alert('情報に誤りがあります')
+    }
+  } else {
+    Alert.alert('未入力事項があります')
   }
 }
 
@@ -41,10 +45,10 @@ const CreateTraining = (): JSX.Element | null => {
 
   const { date } = useLocalSearchParams()
   if (typeof date !== 'string') { return null }
-  const [partsValue, setPartsValue] = useState('')
-  const [eventsValue, setEventsValue] = useState('')
-  const [weightValue, setWeightValue] = useState('')
-  const [setValue, setSetValue] = useState('')
+  const [partsValue, setPartsValue] = useState<string>('')
+  const [eventsValue, setEventsValue] = useState<string>('')
+  const [weightValue, setWeightValue] = useState<string>('')
+  const [setValue, setSetValue] = useState<string>('')
 
   useEffect(() => {
     navigation.setOptions({

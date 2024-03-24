@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { View, StyleSheet, Text, TouchableOpacity, FlatList, ScrollView } from 'react-native'
+import { router } from 'expo-router'
 
 // firebase
 import { auth, db } from '../../config'
@@ -17,6 +18,10 @@ interface Props {
 }
 
 const FONTSIZE = 13
+const handlePress = (value: EatingData, date: string): void => {
+  const { id, name, total, protein, fat, carbo } = value
+  router.push({ pathname: 'edit/editEat', params: { date, id, name, total, protein, fat, carbo } })
+}
 
 const Eating = (props: Props): JSX.Element => {
   const { date } = props
@@ -70,7 +75,7 @@ const Eating = (props: Props): JSX.Element => {
               <FlatList
                 data={eatData}
                 renderItem={({ item }) => (
-                  <TouchableOpacity style={styles.eatContent}>
+                  <TouchableOpacity style={styles.eatContent} onPress={() => { handlePress(item, date) }}>
                     <Text style={styles.content}>{item.name}</Text>
                     <Text style={styles.total}>{item.total} kcal</Text>
                     <Text style={styles.protein}>{calcProteinGram(item.total, item.protein)} g</Text>
@@ -123,7 +128,7 @@ const styles = StyleSheet.create({
   },
   eatContent: {
     flexDirection: 'row',
-    marginVertical: 6
+    paddingVertical: 6
   },
   header: {
     paddingBottom: 12,

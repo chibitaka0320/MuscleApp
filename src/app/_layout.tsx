@@ -38,6 +38,13 @@ const Layout = (): JSX.Element => {
           headerLeft: () => { return (<BackButton/>) }
         }}
       />
+      <Stack.Screen
+        name='edit/editEmail'
+        options={{
+          headerTitle: 'メールアドレス変更',
+          headerLeft: () => { return (<BackButton/>) }
+        }}
+      />
     </Stack>
   )
 }

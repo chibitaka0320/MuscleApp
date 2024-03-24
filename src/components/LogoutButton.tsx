@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Alert } from 'react-native'
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native'
 import { router } from 'expo-router'
 
 // firebase
@@ -17,6 +17,7 @@ const onLogout = (): void => {
         signOut(auth)
           .then(() => {
             router.back()
+            router.back()
             router.replace('/auth/login')
           })
           .catch(() => {
@@ -29,19 +30,22 @@ const onLogout = (): void => {
 
 export const LogoutButton = (): JSX.Element => {
   return (
-    <View style={styles.logOut}>
-      <Text onPress={onLogout} style={styles.logOutText}>ログアウト</Text>
+    <View style={styles.container}>
+      <TouchableOpacity onPress={onLogout} >
+        <Text style={styles.outText}>ログアウト</Text>
+      </TouchableOpacity>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  logOut: {
-    alignItems: 'center'
+  container: {
+    borderTopWidth: 1,
+    borderColor: '#DEDDDC'
   },
-  logOutText: {
-    color: 'red',
+  outText: {
     fontSize: 16,
-    marginTop: 20
+    marginVertical: 10,
+    paddingVertical: 10
   }
 })

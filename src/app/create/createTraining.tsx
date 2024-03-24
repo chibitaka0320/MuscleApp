@@ -43,10 +43,12 @@ const handlePress = async (date: string, parts: string, events: string, weight: 
 const CreateTraining = (): JSX.Element | null => {
   const navigation = useNavigation()
 
-  const { date } = useLocalSearchParams()
+  const date = String(useLocalSearchParams().date)
+  const parts = String(useLocalSearchParams().parts)
+  const events = String(useLocalSearchParams().events)
   if (typeof date !== 'string') { return null }
-  const [partsValue, setPartsValue] = useState<string>('')
-  const [eventsValue, setEventsValue] = useState<string>('')
+  const [partsValue, setPartsValue] = useState<string>(parts ?? '')
+  const [eventsValue, setEventsValue] = useState<string>(events ?? '')
   const [weightValue, setWeightValue] = useState<string>('')
   const [setValue, setSetValue] = useState<string>('')
 

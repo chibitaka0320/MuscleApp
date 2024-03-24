@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { View, StyleSheet, FlatList } from 'react-native'
+import { View, StyleSheet, FlatList, Text } from 'react-native'
 
 // firebase
 import { auth, db } from '../../config'
@@ -18,7 +18,7 @@ interface Props {
 
 const Training = (props: Props): JSX.Element => {
   const { date } = props
-  const [trainingData, setTrainingData] = useState<Parts[]>()
+  const [trainingData, setTrainingData] = useState<Parts[]>([])
   useEffect(() => {
     if (auth.currentUser === null) return
     const ref = collection(db, `users/${auth.currentUser.uid}/training`)
@@ -42,10 +42,17 @@ const Training = (props: Props): JSX.Element => {
 
   return (
     <View style={styles.container}>
-       <FlatList
-        data={trainingData}
-        renderItem={({ item }) => <PartsItem data={item}/>}
-       />
+      {(trainingData?.length > 0)
+        ? (
+          <FlatList
+           data={trainingData}
+           renderItem={({ item }) => <PartsItem data={item} date={date}/>}
+          />
+          )
+        : (
+          <View style={styles.nonData}><Text>データなし</Text></View>
+          )
+      }
     </View>
   )
 }
@@ -53,6 +60,15 @@ const Training = (props: Props): JSX.Element => {
 const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  nonData: {
+    backgroundColor: '#FFFFFF',
+    marginHorizontal: 15,
+    marginTop: 30,
+    borderRadius: 5,
+    height: 120,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })
 

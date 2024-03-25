@@ -7,8 +7,11 @@ export interface UserInfo {
   birthday?: Timestamp
   gender?: string
   activeLevel?: string
-  goalWeight?: number
-  startDate?: number
-  endDate?: number
-  pfc?: number
+  basalMetabo?: number
+  totalConsumed?: number
+  goalWeight?: string
+  startDate?: Timestamp
+  endDate?: Timestamp
+  pfc?: string
+  goalKcal?: number
 }

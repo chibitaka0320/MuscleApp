@@ -13,20 +13,6 @@ import { doc, onSnapshot } from 'firebase/firestore'
 // components
 import { calcActiveLevel, calcAge, calcGender } from '../../components/Calc'
 
-const handlePress = (data: UserInfo): void => {
-  router.push({
-    pathname: 'edit/editProf',
-    params: {
-      userName: data.userName,
-      height: data.height,
-      weight: data.weight,
-      birthday: data.birthday?.toDate(),
-      gender: data.gender,
-      activeLevel: data.activeLevel
-    }
-  })
-}
-
 const ProfSetting = (): JSX.Element => {
   const [data, setData] = useState<UserInfo>({})
   useEffect(() => {
@@ -41,7 +27,7 @@ const ProfSetting = (): JSX.Element => {
   return (
     <View style={styles.container}>
       <View style={styles.contents}>
-        <TouchableOpacity style={styles.editButton} onPress={() => { handlePress(data) }}>
+        <TouchableOpacity style={styles.editButton} onPress={() => { router.push('edit/editProf') }}>
           <Feather name='edit' size={22} />
         </TouchableOpacity>
         <View style={styles.item}>
@@ -67,6 +53,24 @@ const ProfSetting = (): JSX.Element => {
         <View style={styles.item}>
           <Text style={styles.itemTitle}>活動レベル</Text>
           <Text>{calcActiveLevel(data?.activeLevel)}</Text>
+        </View>
+        <View style={styles.item}>
+          <Text style={styles.itemTitle}>基礎代謝</Text>
+          <Text>
+            {data?.basalMetabo !== undefined && data?.basalMetabo !== 0
+              ? `${data?.basalMetabo} kcal`
+              : '計算不可(未設定項目あり)'
+            }
+          </Text>
+        </View>
+        <View style={styles.item}>
+          <Text style={styles.itemTitle}>総消費カロリー</Text>
+          <Text>
+            {data?.totalConsumed !== undefined && data?.totalConsumed !== 0
+              ? `${data?.totalConsumed} kcal`
+              : '計算不可(未設定項目あり)'
+            }
+          </Text>
         </View>
       </View>
     </View>

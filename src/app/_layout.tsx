@@ -27,7 +27,24 @@ const Layout = (): JSX.Element => {
       <Stack.Screen
         name='menu/menu'
         options={{
-          headerTitle: 'Menu',
+          headerLeft: () => { return (<BackButton/>) }
+        }}
+      />
+      <Stack.Screen
+        name='setting/profSetting'
+        options={{
+          headerLeft: () => { return (<BackButton/>) }
+        }}
+      />
+      <Stack.Screen
+        name='setting/goalSetting'
+        options={{
+          headerLeft: () => { return (<BackButton/>) }
+        }}
+      />
+      <Stack.Screen
+        name='setting/accountSetting'
+        options={{
           headerLeft: () => { return (<BackButton/>) }
         }}
       />
@@ -39,9 +56,37 @@ const Layout = (): JSX.Element => {
         }}
       />
       <Stack.Screen
+        name='create/createEat'
+        options={{
+          headerTitle: 'メールアドレス変更',
+          headerLeft: () => { return (<BackButton/>) }
+        }}
+      />
+      <Stack.Screen
+        name='create/createTraining'
+        options={{
+          headerTitle: 'メールアドレス変更',
+          headerLeft: () => { return (<BackButton/>) }
+        }}
+      />
+      <Stack.Screen
         name='edit/editEmail'
         options={{
           headerTitle: 'メールアドレス変更',
+          headerLeft: () => { return (<BackButton/>) }
+        }}
+      />
+      <Stack.Screen
+        name='edit/editProf'
+        options={{
+          presentation: 'modal',
+          headerLeft: () => { return (<BackButton/>) }
+        }}
+      />
+      <Stack.Screen
+        name='edit/editGoal'
+        options={{
+          presentation: 'modal',
           headerLeft: () => { return (<BackButton/>) }
         }}
       />

@@ -14,9 +14,20 @@ export const GenderMenu = (): Props[] => {
 
 export const ActiveMenu = (): Props[] => {
   const activeLevel = [
-    { label: '低(ほとんど運動しない)', value: '1.2' },
-    { label: '中(週2~3回程度の軽い運動)', value: '1.5' },
-    { label: '高(週4~6回程度の激しい運動)', value: '1.7' }
+    { label: 'ほとんど運動しない', value: '1.2' },
+    { label: '軽い運動', value: '1.375' },
+    { label: '中程度の運動', value: '1.55' },
+    { label: '激しい運動', value: '1.725' },
+    { label: '非常に激しい運動', value: '1.9' }
   ]
   return activeLevel
+}
+
+export const PFCMenu = (): Props[] => {
+  const pfcMenu = [
+    { label: 'クリーン', value: '1' },
+    { label: 'バルク', value: '2' },
+    { label: 'ロカボ', value: '1' }
+  ]
+  return pfcMenu
 }

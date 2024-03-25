@@ -9,14 +9,14 @@ import { router } from 'expo-router'
 
 // firebase
 import { auth, db } from '../../config'
-import { Timestamp, doc, getDoc, setDoc } from 'firebase/firestore'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
 
 // components
 import { LandscapeButton } from '../../components/LandscapeButton'
-import { calcBasalMetabo, calcGoalKcal, calcTotalConsumed, formDate } from '../../components/Calc'
+import { calcGoalKcal, formDate, pfcPercent } from '../../components/Calc'
 
 // data
-import { ActiveMenu, GenderMenu } from '../../data/UserMenu'
+import { PFCMenu } from '../../data/UserMenu'
 import { type UserInfo } from '../types/UserInfo'
 
 const handlePress = async (
@@ -26,15 +26,14 @@ const handlePress = async (
   birthday: Date,
   gender: string,
   activeLevel: string,
+  basalMetabo: number,
+  totalConsumed: number,
   goalWeight: string,
   startDate: Date,
   endDate: Date,
   pfc: string): Promise<void> => {
   if (auth.currentUser === null) { return }
   const userDoc = doc(db, `users/${auth.currentUser.uid}`)
-  const timestampBirth = Timestamp.fromDate(birthday)
-  const basalMetabo = calcBasalMetabo(height, weight, timestampBirth, gender)
-  const totalConsumed = calcTotalConsumed(basalMetabo, activeLevel)
   const goalKcal = calcGoalKcal(totalConsumed, startDate, endDate, weight, goalWeight)
   try {
     await setDoc(userDoc, {
@@ -58,18 +57,21 @@ const handlePress = async (
   }
 }
 
-const EditProf = (): JSX.Element | null => {
+const EditGoal = (): JSX.Element | null => {
   const [userName, setUserName] = useState<string>('')
   const [height, setHeight] = useState<string>('')
   const [weight, setWeight] = useState<string>('')
   const [birthday, setBirthday] = useState<Date>(new Date(''))
   const [gender, setGender] = useState<string>('')
   const [activeLevel, setActiveLevel] = useState<string>('')
+  const [basalMetabo, setBasalMetabo] = useState<number>(0)
+  const [totalConsumed, setTotalConsumed] = useState<number>(0)
   const [goalWeight, setGoalWeight] = useState<string>('')
   const [startDate, setStartDate] = useState<Date>(new Date(''))
   const [endDate, setEndDate] = useState<Date>(new Date(''))
   const [pfc, setPfc] = useState<string>('')
-  const [datePickerVisible, setDatePickerVisible] = useState<boolean>(false)
+  const [startPicker, setStartPicker] = useState<boolean>(false)
+  const [endPicker, setEndPicker] = useState<boolean>(false)
 
   useEffect(() => {
     const fetch = async (): Promise<void> => {
@@ -83,6 +85,8 @@ const EditProf = (): JSX.Element | null => {
       setBirthday(userInfo.birthday?.toDate() ?? new Date(''))
       setGender(userInfo.gender ?? '')
       setActiveLevel(userInfo.activeLevel ?? '')
+      setBasalMetabo(userInfo.basalMetabo ?? 0)
+      setTotalConsumed(userInfo.totalConsumed ?? 0)
       setGoalWeight(userInfo.goalWeight ?? '')
       setStartDate(userInfo.startDate?.toDate() ?? new Date(''))
       setEndDate(userInfo.endDate?.toDate() ?? new Date(''))
@@ -102,100 +106,81 @@ const EditProf = (): JSX.Element | null => {
         <View style={styles.contents}>
 
           <View style={styles.items}>
-            <Text style={styles.itemText}>ユーザー名</Text>
+            <Text style={styles.itemText}>目標体重</Text>
             <TextInput
               style={styles.itemInput}
               placeholder='未設定'
               autoCapitalize='none'
-              value={userName}
-              onChangeText={(value) => { setUserName(value) }}
-            >
-            </TextInput>
-          </View>
-
-          <View style={styles.items}>
-            <Text style={styles.itemText}>身長</Text>
-            <TextInput
-              style={styles.itemInput}
-              placeholder='未設定'
-              autoCapitalize='none'
-              value={height}
-              onChangeText={(value) => { setHeight(value) }}
+              value={goalWeight}
+              onChangeText={(value) => { setGoalWeight(value) }}
               keyboardType='decimal-pad'
             >
             </TextInput>
           </View>
 
           <View style={styles.items}>
-            <Text style={styles.itemText}>体重</Text>
-            <TextInput
-              style={styles.itemInput}
-              placeholder='未設定'
-              autoCapitalize='none'
-              value={weight}
-              onChangeText={(value) => { setWeight(value) }}
-              keyboardType='decimal-pad'
-            >
-            </TextInput>
-          </View>
-
-          <View style={styles.items}>
-            <Text style={styles.itemText}>生年月日</Text>
+            <Text style={styles.itemText}>開始日</Text>
             <TextInput
               style={styles.itemInput}
               editable={false}
               placeholder='未設定'
               autoCapitalize='none'
-              value={formDate(birthday)}
-              onPressIn={() => { setDatePickerVisible(true) }}
+              value={formDate(startDate)}
+              onPressIn={() => { setStartPicker(true) }}
             >
             </TextInput>
             <DateTimePickerModal
-              date={!Number.isNaN(birthday.valueOf()) ? birthday : new Date(2000, 0, 1)}
-              isVisible={datePickerVisible}
+              date={!Number.isNaN(startDate.valueOf()) ? startDate : new Date()}
+              isVisible={startPicker}
               mode='date'
               onConfirm={(date) => {
-                setBirthday(date)
-                setDatePickerVisible(false)
+                setStartDate(date)
+                setStartPicker(false)
               }}
-              onCancel={() => { setDatePickerVisible(false) }}
+              onCancel={() => { setStartPicker(false) }}
             />
           </View>
 
           <View style={styles.items}>
-            <Text style={styles.itemText}>性別</Text>
-            <View style={styles.itemInput}>
-              <Dropdown
-                data={GenderMenu()}
-                maxHeight={250}
-                labelField="label"
-                valueField="value"
-                placeholder={'性別を選択'}
-                placeholderStyle={{ color: '#B8B8B8' }}
-                value={gender}
-                onChange={({ value }) => {
-                  setGender(value)
-                }}
-              />
-            </View>
+            <Text style={styles.itemText}>終了日</Text>
+            <TextInput
+              style={styles.itemInput}
+              editable={false}
+              placeholder='未設定'
+              autoCapitalize='none'
+              value={formDate(endDate)}
+              onPressIn={() => { setEndPicker(true) }}
+            >
+            </TextInput>
+            <DateTimePickerModal
+              date={!Number.isNaN(endDate.valueOf()) ? endDate : new Date()}
+              isVisible={endPicker}
+              mode='date'
+              onConfirm={(date) => {
+                setEndDate(date)
+                setEndPicker(false)
+              }}
+              onCancel={() => { setEndPicker(false) }}
+            />
           </View>
 
           <View style={styles.items}>
-            <Text style={styles.itemText}>活動レベル</Text>
+            <Text style={styles.itemText}>PFCバランス</Text>
             <View style={styles.itemInput}>
               <Dropdown
-                data={ActiveMenu()}
+                data={PFCMenu()}
                 maxHeight={250}
                 labelField="label"
                 valueField="value"
-                placeholder={'活動レベルを選択'}
+                placeholder={'PFCバランスを選択'}
                 placeholderStyle={{ color: '#B8B8B8' }}
-                value={activeLevel}
+                value={pfc}
                 onChange={({ value }) => {
-                  setActiveLevel(value)
+                  setPfc(value)
                 }}
               />
             </View>
+            <Text style={styles.itemInputSub}>{pfcPercent(pfc)}</Text>
           </View>
 
           <View style={styles.buttons}>
@@ -208,6 +193,8 @@ const EditProf = (): JSX.Element | null => {
                   birthday,
                   gender,
                   activeLevel,
+                  basalMetabo,
+                  totalConsumed,
                   goalWeight,
                   startDate,
                   endDate,
@@ -228,8 +215,7 @@ const styles = StyleSheet.create({
   },
   contents: {
     flex: 1,
-    margin: 30,
-    marginBottom: 150
+    margin: 30
   },
   items: {
     marginBottom: 25
@@ -251,10 +237,14 @@ const styles = StyleSheet.create({
   itemInputValue: {
     fontSize: 16
   },
+  itemInputSub: {
+    marginTop: 10,
+    paddingLeft: 10
+  },
   buttons: {
     marginVertical: 20,
     alignItems: 'center'
   }
 })
 
-export default EditProf
+export default EditGoal

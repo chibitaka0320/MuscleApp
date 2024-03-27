@@ -5,9 +5,9 @@ import { router, useLocalSearchParams } from 'expo-router'
 // component
 import { CircleButton } from '../../components/CircleButton'
 
-const onBody = (date: string): void => {
-  router.replace({ pathname: '/create/createBody', params: { date } })
-}
+// const onBody = (date: string): void => {
+//   router.replace({ pathname: '/create/createBody', params: { date } })
+// }
 const onTraining = (date: string): void => {
   router.replace({ pathname: '/create/createTraining', params: { date } })
 }
@@ -21,7 +21,7 @@ const createMenu = (): JSX.Element => {
   return (
     <View style={styles.container}>
       <View style={styles.menuContainer}>
-        <View>
+        {/* <View>
           <Text style={styles.menuTitle}>ボディ</Text>
           <CircleButton
             style={styles.circleButton}
@@ -32,7 +32,7 @@ const createMenu = (): JSX.Element => {
             }}>
             <FontAwesome5 name='camera' size={30}/>
           </CircleButton>
-        </View>
+        </View> */}
         <View>
           <Text style={styles.menuTitle}>トレーニング</Text>
           <CircleButton

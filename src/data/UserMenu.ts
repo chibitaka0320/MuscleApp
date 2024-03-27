@@ -26,8 +26,8 @@ export const ActiveMenu = (): Props[] => {
 export const PFCMenu = (): Props[] => {
   const pfcMenu = [
     { label: 'クリーン', value: '1' },
-    { label: 'バルク', value: '2' },
-    { label: 'ロカボ', value: '1' }
+    { label: 'ロカボ', value: '2' },
+    { label: 'バルク', value: '3' }
   ]
   return pfcMenu
 }

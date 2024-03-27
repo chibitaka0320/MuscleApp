@@ -1,36 +1,14 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-// import { router } from 'expo-router'
+import { router } from 'expo-router'
 
-// firebase
-// import { signOut } from 'firebase/auth'
-// import { auth } from '../config'
-
-// const onLogout = (): void => {
-//   Alert.alert('ログアウトしますか？', '', [
-//     {
-//       text: 'キャンセル'
-//     },
-//     {
-//       text: 'ログアウト',
-//       style: 'destructive',
-//       onPress: () => {
-//         signOut(auth)
-//           .then(() => {
-//             router.back()
-//             router.replace('/auth/login')
-//           })
-//           .catch(() => {
-//             Alert.alert('ログアウトに失敗しました')
-//           })
-//       }
-//     }
-//   ])
-// }
+const onLogout = (): void => {
+  router.push('/auth/deleteAccount')
+}
 
 export const DeleteAccountButton = (): JSX.Element => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => {}} >
+      <TouchableOpacity onPress={() => { onLogout() }} >
         <Text style={styles.outText}>アカウント削除</Text>
       </TouchableOpacity>
     </View>

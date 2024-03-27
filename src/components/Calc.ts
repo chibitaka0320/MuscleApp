@@ -1,4 +1,5 @@
 import { type Timestamp } from 'firebase/firestore'
+import { type EatingGoalPFC } from '../app/types/Eating'
 
 export const calcKcal = (total: string, value: number): number => {
   const kcal = Math.round(Number(total) * (value * 0.01))
@@ -106,13 +107,28 @@ export const calcGoalKcal = (
     goalWeight !== ''
   ) {
     const termDay = Math.ceil((endDate.getTime() - startDate.getTime()) / 86400000)
-    console.log(termDay)
     const termWeight = Number(weight) - Number(goalWeight)
     const termKcal = Math.round(termWeight * 7200 / termDay)
     const goalKcal = Number(totalConsumed) - termKcal
     return goalKcal
   }
   return 0
+}
+
+export const calcGoalPFC = (
+  goalKcal: number,
+  pfc: string
+): EatingGoalPFC => {
+  if (goalKcal === 0 && pfc === '') return { goalProtein: 0, goalFat: 0, goalCarbo: 0 }
+  if (pfc === '1') {
+    return {
+      goalProtein: Math.round(goalKcal * 0.4 / 4),
+      goalFat: Math.round(goalKcal * 0.2 / 9),
+      goalCarbo: Math.round(goalKcal * 0.4 / 4)
+    }
+  } else {
+    return { goalProtein: 0, goalFat: 0, goalCarbo: 0 }
+  }
 }
 
 export const formDate = (date: Date): string => {

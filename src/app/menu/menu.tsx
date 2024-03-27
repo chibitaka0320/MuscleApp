@@ -47,13 +47,13 @@ const Menu = (): JSX.Element => {
         <MaterialIcons name='arrow-forward-ios' size={20} color={COLOR}/>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.item}>
+      {/* <TouchableOpacity style={styles.item}>
         <View style={styles.itemLeft}>
           <SimpleLineIcons name='share' size={20} style={styles.itemIcon}/>
           <Text style={styles.itemName}>共有設定</Text>
         </View>
         <MaterialIcons name='arrow-forward-ios' size={20} color={COLOR}/>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <TouchableOpacity style={styles.item} onPress={() => { onAccount() }} >
         <View style={styles.itemLeft}>

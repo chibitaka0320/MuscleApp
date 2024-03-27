@@ -16,8 +16,9 @@ const onLogout = (): void => {
       onPress: () => {
         signOut(auth)
           .then(() => {
-            router.back()
-            router.back()
+            while (router.canGoBack()) {
+              router.back()
+            }
             router.replace('/auth/login')
           })
           .catch(() => {

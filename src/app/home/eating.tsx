@@ -4,14 +4,15 @@ import { router } from 'expo-router'
 
 // firebase
 import { auth, db } from '../../config'
-import { collection, onSnapshot, query, where } from 'firebase/firestore'
+import { collection, doc, onSnapshot, query, where } from 'firebase/firestore'
 
 // types
-import { type EatingSumData, type EatingData } from '../types/Eating'
+import { type EatingSumData, type EatingData, type EatingGoalPFC } from '../types/Eating'
+import { type UserInfo } from '../types/UserInfo'
 
 // components
 import CalorieGraph from '../../components/CalorieGraph'
-import { calcCarboGram, calcFatGram, calcProteinGram } from '../../components/Calc'
+import { calcCarboGram, calcFatGram, calcGoalPFC, calcProteinGram } from '../../components/Calc'
 
 interface Props {
   date: string
@@ -27,6 +28,8 @@ const Eating = (props: Props): JSX.Element => {
   const { date } = props
   const [eatData, setEatData] = useState<EatingData[]>([])
   const [eatSumData, setEatSumData] = useState<EatingSumData>({ total: 0, protein: 0, fat: 0, carbo: 0 })
+  const [goalKcal, setGoalKcal] = useState<number>(0)
+  const [goalPFC, setGoalPFC] = useState<EatingGoalPFC>({ goalProtein: 0, goalFat: 0, goalCarbo: 0 })
   useEffect(() => {
     if (auth.currentUser === null) return
     const ref = collection(db, `users/${auth.currentUser.uid}/eating`)
@@ -64,10 +67,21 @@ const Eating = (props: Props): JSX.Element => {
     return unsubscribe
   }, [date])
 
+  useEffect(() => {
+    if (auth.currentUser === null) return
+    const userDoc = doc(db, `users/${auth.currentUser.uid}`)
+    const unsubscribe = onSnapshot(userDoc, (snapshot) => {
+      const { goalKcal, pfc } = snapshot.data() as UserInfo
+      setGoalKcal(goalKcal ?? 0)
+      setGoalPFC(calcGoalPFC(goalKcal ?? 0, pfc ?? ''))
+    })
+    return unsubscribe
+  }, [])
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.item}>
-        <CalorieGraph data={eatSumData}/>
+        <CalorieGraph data={eatSumData} goalKcal={goalKcal} goalPFC={goalPFC}/>
       </View>
       <View style={styles.item}>
         {(eatData?.length > 0)

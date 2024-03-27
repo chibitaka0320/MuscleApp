@@ -90,6 +90,13 @@ const Layout = (): JSX.Element => {
           headerLeft: () => { return (<BackButton/>) }
         }}
       />
+      <Stack.Screen
+        name='auth/deleteAccount'
+        options={{
+          presentation: 'fullScreenModal',
+          headerLeft: () => { return (<BackButton/>) }
+        }}
+      />
     </Stack>
   )
 }

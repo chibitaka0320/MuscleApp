@@ -13,3 +13,9 @@ export interface EatingSumData {
   fat: number
   carbo: number
 }
+
+export interface EatingGoalPFC {
+  goalProtein: number
+  goalFat: number
+  goalCarbo: number
+}

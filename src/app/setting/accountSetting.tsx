@@ -17,6 +17,10 @@ const onEmail = (email: string): void => {
   router.push({ pathname: '/edit/editEmail', params: { email } })
 }
 
+const onPassword = (): void => {
+  router.push('/edit/editPassword')
+}
+
 const AccountSetting = (): JSX.Element => {
   const [uid, setUid] = useState<string>('')
   const [email, setEmail] = useState<string>('')
@@ -43,7 +47,7 @@ const AccountSetting = (): JSX.Element => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.item} onPress={() => {}}>
+        <TouchableOpacity style={styles.item} onPress={() => { onPassword() }}>
           <Text style={styles.itemName}>パスワード</Text>
           <View style={styles.itemRight}>
             <Text style={styles.itemValueRight}>変更</Text>

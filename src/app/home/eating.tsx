@@ -71,9 +71,11 @@ const Eating = (props: Props): JSX.Element => {
     if (auth.currentUser === null) return
     const userDoc = doc(db, `users/${auth.currentUser.uid}`)
     const unsubscribe = onSnapshot(userDoc, (snapshot) => {
-      const { goalKcal, pfc } = snapshot.data() as UserInfo
-      setGoalKcal(goalKcal ?? 0)
-      setGoalPFC(calcGoalPFC(goalKcal ?? 0, pfc ?? ''))
+      if (snapshot.data() !== undefined) {
+        const { goalKcal, pfc } = snapshot.data() as UserInfo
+        setGoalKcal(goalKcal ?? 0)
+        setGoalPFC(calcGoalPFC(goalKcal ?? 0, pfc ?? ''))
+      }
     })
     return unsubscribe
   }, [])

@@ -33,25 +33,25 @@ const GoalSetting = (): JSX.Element => {
         </TouchableOpacity>
         <View style={styles.item}>
           <Text style={styles.itemTitle}>目標体重</Text>
-          <Text>{data.goalWeight !== undefined && data.goalWeight !== '' ? `${data.weight ?? '未設定'} → ${data.goalWeight} kg` : '未設定'}</Text>
+          <Text>{data?.goalWeight !== undefined && data?.goalWeight !== '' ? `${data?.weight ?? '未設定'} → ${data.goalWeight} kg` : '未設定'}</Text>
         </View>
         <View style={styles.item}>
           <Text style={styles.itemTitle}>目標摂取カロリー</Text>
-          <Text>{data.goalKcal !== undefined && data.goalKcal !== 0 ? `${data.goalKcal} kcal/日` : '未設定'}</Text>
+          <Text>{data?.goalKcal !== undefined && data?.goalKcal !== 0 ? `${data?.goalKcal} kcal/日` : '未設定'}</Text>
         </View>
         <View style={styles.item}>
           <Text style={styles.itemTitle}>開始日</Text>
-          <Text>{data.startDate !== undefined && data.startDate != null ? formDate(data?.startDate.toDate()) : '未設定'}</Text>
+          <Text>{data?.startDate !== undefined && data?.startDate != null ? formDate(data?.startDate.toDate()) : '未設定'}</Text>
         </View>
         <View style={styles.item}>
           <Text style={styles.itemTitle}>終了日</Text>
-          <Text>{data.endDate !== undefined && data.endDate != null ? formDate(data?.endDate.toDate()) : '未設定'}</Text>
+          <Text>{data?.endDate !== undefined && data?.endDate != null ? formDate(data?.endDate.toDate()) : '未設定'}</Text>
         </View>
         <View style={styles.item}>
           <Text style={styles.itemTitle}>PFC</Text>
           <View style={styles.itemValue}>
-            <Text>{pfcTitle(data.pfc ?? '')}</Text>
-            <Text style={styles.itemValueSub}>{pfcPercent(data.pfc ?? '')}</Text>
+            <Text>{pfcTitle(data?.pfc ?? '')}</Text>
+            <Text style={styles.itemValueSub}>{pfcPercent(data?.pfc ?? '')}</Text>
           </View>
         </View>
       </View>

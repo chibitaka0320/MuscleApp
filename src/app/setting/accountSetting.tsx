@@ -29,7 +29,7 @@ const AccountSetting = (): JSX.Element => {
     if (auth.currentUser.email === null) return
     setUid(auth.currentUser.uid)
     setEmail(auth.currentUser.email)
-  }, [])
+  }, [auth.currentUser])
 
   return (
     <View style={styles.container}>

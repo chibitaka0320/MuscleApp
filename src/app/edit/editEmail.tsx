@@ -1,28 +1,91 @@
 import { useState } from 'react'
-import { View, Text, StyleSheet, TextInput } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Alert } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 
 // components
 import { LandscapeButton } from '../../components/LandscapeButton'
 
-const handlePress = (email: string): void => {
-  router.back()
+// firebase
+import { EmailAuthProvider, reauthenticateWithCredential, signOut, verifyBeforeUpdateEmail } from 'firebase/auth'
+import { auth } from '../../config'
+
+const handlePress = async (currentEmail: string, newEmail: string, password: string): Promise<void> => {
+  const user = auth.currentUser
+  const credential = EmailAuthProvider.credential(currentEmail, password)
+  if (user === null) return
+  reauthenticateWithCredential(user, credential)
+    .then(() => {
+      verifyBeforeUpdateEmail(user, newEmail)
+        .then(() => {
+          Alert.alert('新しいメールアドレスにメールを送信しました', '24時間以内にメールを認証し、再ログインしてください', [
+            {
+              text: 'OK',
+              onPress: () => {
+                signOut(auth)
+                  .then(() => {
+                    while (router.canGoBack()) {
+                      router.back()
+                    }
+                    router.replace('/auth/login')
+                  })
+                  .catch(() => {
+                    Alert.alert('エラー')
+                  })
+              }
+            }
+          ])
+          console.log('success')
+        })
+        .catch((error: any) => {
+          console.log(error)
+          Alert.alert('メールアドレスを正しく入力してください')
+        })
+    })
+    .catch(() => {
+      Alert.alert('パスワードが違います')
+    })
 }
 
 const editEmail = (): JSX.Element => {
-  const [email, setEmail] = useState(String(useLocalSearchParams().email))
+  const currentEmail = String(useLocalSearchParams().email)
+  const [newEmail, setNewEmail] = useState('')
+  const [password, setPassword] = useState('')
   return (
     <View style={styles.container}>
-      <Text>メールアドレス</Text>
-      <TextInput
-        style={styles.textInput}
-        autoFocus
-        value={email}
-        onChangeText={(value) => { setEmail(value) }}
-      >
-      </TextInput>
+      <View style={styles.item}>
+        <Text>現在のメールアドレス</Text>
+        <TextInput
+          style={styles.text}
+          editable={false}
+        >{currentEmail}
+        </TextInput>
+      </View>
+      <View style={styles.item}>
+        <Text>新しいメールアドレス</Text>
+        <TextInput
+          style={styles.textInput}
+          autoFocus
+          autoCapitalize='none'
+          value={newEmail}
+          onChangeText={(value) => { setNewEmail(value) }}
+          keyboardType='email-address'
+          textContentType='emailAddress'
+          >
+        </TextInput>
+      </View>
+      <View style={styles.item}>
+        <Text>パスワード</Text>
+        <TextInput
+          style={styles.textInput}
+          autoCapitalize='none'
+          secureTextEntry
+          value={password}
+          onChangeText={(value) => { setPassword(value) }}
+          >
+        </TextInput>
+      </View>
       <View style={styles.button}>
-        <LandscapeButton onPress={() => { handlePress(email) }} >変更</LandscapeButton>
+        <LandscapeButton onPress={() => { void handlePress(currentEmail, newEmail, password) }} >変更</LandscapeButton>
       </View>
     </View>
   )
@@ -33,6 +96,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
     padding: 20
+  },
+  item: {
+    marginBottom: 10
+  },
+  text: {
+    backgroundColor: '#FFFFFF',
+    fontSize: 16,
+    paddingHorizontal: 10,
+    height: 40,
+    marginVertical: 5
   },
   textInput: {
     backgroundColor: '#FFFFFF',

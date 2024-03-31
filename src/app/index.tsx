@@ -22,7 +22,7 @@ const Index = (): JSX.Element | null => {
   }
 
   return (
-    <Redirect href={isAuthenticated ? 'home' : 'auth/login'} />
+    <Redirect href={isAuthenticated ? 'home' : 'auth/loginMail'} />
   )
 }
 

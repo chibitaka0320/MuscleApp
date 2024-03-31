@@ -26,7 +26,7 @@ const handlePress = async (currentEmail: string, newEmail: string, password: str
                     while (router.canGoBack()) {
                       router.back()
                     }
-                    router.replace('/auth/login')
+                    router.replace('/auth/loginMail')
                   })
                   .catch(() => {
                     Alert.alert('エラー')

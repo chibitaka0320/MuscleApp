@@ -11,16 +11,16 @@ const Layout = (): JSX.Element => {
       <Stack.Screen
         name='auth/loginMail'
         options={{
-          presentation: 'modal',
-          headerLeft: () => { return (<BackButton/>) },
+          // presentation: 'modal',
+          // headerLeft: () => { return (<BackButton/>) },
           headerTitle: 'ログイン'
         }}
       />
       <Stack.Screen
         name='auth/signupMail'
         options={{
-          presentation: 'modal',
-          headerLeft: () => { return (<BackButton/>) },
+          // presentation: 'modal',
+          // headerLeft: () => { return (<BackButton/>) },
           headerTitle: '新規登録'
         }}
       />

@@ -32,7 +32,7 @@ const ProfSetting = (): JSX.Element => {
         </TouchableOpacity>
         <View style={styles.item}>
           <Text style={styles.itemTitle}>ユーザー名</Text>
-          <Text>{data?.userName !== undefined ? data?.userName : '未設定'}</Text>
+          <Text>{data?.userName !== undefined && data?.userName !== '' ? data?.userName : '未設定'}</Text>
         </View>
         <View style={styles.item}>
           <Text style={styles.itemTitle}>身長</Text>
@@ -40,7 +40,7 @@ const ProfSetting = (): JSX.Element => {
         </View>
         <View style={styles.item}>
           <Text style={styles.itemTitle}>体重</Text>
-          <Text>{data?.weight !== undefined ? `${data?.weight} kg` : '未設定'}</Text>
+          <Text>{data?.weight !== undefined && data?.weight !== '' ? `${data?.weight} kg` : '未設定'}</Text>
         </View>
         <View style={styles.item}>
           <Text style={styles.itemTitle}>年齢</Text>
@@ -48,7 +48,7 @@ const ProfSetting = (): JSX.Element => {
         </View>
         <View style={styles.item}>
           <Text style={styles.itemTitle}>性別</Text>
-          <Text>{data?.gender !== undefined ? calcGender(data?.gender) : '未設定'}</Text>
+          <Text>{data?.gender !== undefined && data?.gender !== '' ? calcGender(data?.gender) : '未設定'}</Text>
         </View>
         <View style={styles.item}>
           <Text style={styles.itemTitle}>活動レベル</Text>

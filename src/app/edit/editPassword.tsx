@@ -28,6 +28,8 @@ const onUpdate = (A: string, B: string, C: string): void => {
           }).catch(() => {
             Alert.alert('新しいパスワードを正しく入力してください')
           })
+        } else {
+          Alert.alert('確認用のパスワードが一致しません')
         }
       })
       .catch(() => {

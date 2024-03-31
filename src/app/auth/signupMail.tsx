@@ -1,6 +1,6 @@
 import { router } from 'expo-router'
 import { useState } from 'react'
-import { View, Text, StyleSheet, TextInput, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Alert, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native'
 
 // firebase
 import { createUserWithEmailAndPassword } from 'firebase/auth'
@@ -12,7 +12,9 @@ import { OblongButton } from '../../components/OblongButton'
 const handlePress = (email: string, password: string): void => {
   createUserWithEmailAndPassword(auth, email, password)
     .then(() => {
-      router.back()
+      while (router.canGoBack()) {
+        router.back()
+      }
       router.replace('/home/training')
     })
     .catch((error) => {
@@ -23,6 +25,10 @@ const handlePress = (email: string, password: string): void => {
         Alert.alert('パスワードを正しく入力してください')
       }
     })
+}
+
+const login = (): void => {
+  router.replace('auth/loginMail')
 }
 
 const SignupMail = (): JSX.Element => {
@@ -65,6 +71,14 @@ const SignupMail = (): JSX.Element => {
           <OblongButton style={{ marginVertical: 40 }} onPress={() => { handlePress(email, password) }}>
             新規登録
           </OblongButton>
+          <View style={styles.loginTrans}>
+            <View>
+              <Text>すでにアカウントをお持ちの場合</Text>
+            </View>
+            <TouchableOpacity style={styles.loginLink} onPress={login}>
+              <Text style={styles.loginLinkText}>ログインはこちら</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -93,6 +107,17 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     fontSize: 16,
     padding: 10
+  },
+  loginTrans: {
+    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  loginLink: {
+    marginLeft: 10
+  },
+  loginLinkText: {
+    fontWeight: 'bold'
   }
 })
 

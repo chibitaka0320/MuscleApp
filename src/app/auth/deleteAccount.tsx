@@ -29,7 +29,7 @@ const onDelete = (password: string): void => {
                 while (router.canGoBack()) {
                   router.back()
                 }
-                router.replace('/auth/login')
+                router.replace('/auth/loginMail')
               })
               .catch((error: any) => {
                 console.log(error)

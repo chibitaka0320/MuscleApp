@@ -33,7 +33,11 @@ const GoalSetting = (): JSX.Element => {
         </TouchableOpacity>
         <View style={styles.item}>
           <Text style={styles.itemTitle}>目標体重</Text>
-          <Text>{data?.goalWeight !== undefined && data?.goalWeight !== '' ? `${data?.weight ?? '未設定'} → ${data.goalWeight} kg` : '未設定'}</Text>
+          <Text>
+            {data?.goalWeight !== undefined && data?.goalWeight !== ''
+              ? `${data?.weight !== undefined && data?.weight !== '' ? data?.weight : '未設定'} → ${data.goalWeight} kg`
+              : '未設定'}
+          </Text>
         </View>
         <View style={styles.item}>
           <Text style={styles.itemTitle}>目標摂取カロリー</Text>

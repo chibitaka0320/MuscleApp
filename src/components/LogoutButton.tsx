@@ -19,7 +19,7 @@ const onLogout = (): void => {
             while (router.canGoBack()) {
               router.back()
             }
-            router.replace('/auth/login')
+            router.replace('/auth/loginMail')
           })
           .catch(() => {
             Alert.alert('ログアウトに失敗しました')

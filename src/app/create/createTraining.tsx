@@ -1,6 +1,6 @@
 // react
 import { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, TextInput, Alert } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native'
 
 // navigator
 import { router, useLocalSearchParams, useNavigation } from 'expo-router'
@@ -59,78 +59,84 @@ const CreateTraining = (): JSX.Element | null => {
   }, [])
 
   return (
-    <View style={styles.container}>
-      <View style={styles.contents}>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss()
+      }}
+    >
+      <View style={styles.container}>
+        <View style={styles.contents}>
 
-        <View style={styles.items}>
-          <Text style={styles.itemText}>部位</Text>
-          <View style={styles.itemInput}>
-            <Dropdown
-              data={partsMenu()}
-              maxHeight={250}
-              labelField="label"
-              valueField="label"
-              placeholder={'部位を選択'}
-              placeholderStyle={{ color: '#B8B8B8' }}
-              value={partsValue}
-              onChange={({ label }) => {
-                setPartsValue(label)
-              }}
-            />
+          <View style={styles.items}>
+            <Text style={styles.itemText}>部位</Text>
+            <View style={styles.itemInput}>
+              <Dropdown
+                data={partsMenu()}
+                maxHeight={250}
+                labelField="label"
+                valueField="label"
+                placeholder={'部位を選択'}
+                placeholderStyle={{ color: '#B8B8B8' }}
+                value={partsValue}
+                onChange={({ label }) => {
+                  setPartsValue(label)
+                }}
+              />
+            </View>
           </View>
-        </View>
 
-        <View style={styles.items}>
-          <Text style={styles.itemText}>種目</Text>
-          <View style={styles.itemInput}>
-            <Dropdown
-              data={eventMenu(partsValue)}
-              maxHeight={250}
-              labelField="label"
-              valueField="label"
-              placeholder={'種目を選択'}
-              placeholderStyle={{ color: '#B8B8B8' }}
-              value={eventsValue}
-              onChange={({ label }) => {
-                setEventsValue(label)
-              }}
-            />
+          <View style={styles.items}>
+            <Text style={styles.itemText}>種目</Text>
+            <View style={styles.itemInput}>
+              <Dropdown
+                data={eventMenu(partsValue)}
+                maxHeight={250}
+                labelField="label"
+                valueField="label"
+                placeholder={'種目を選択'}
+                placeholderStyle={{ color: '#B8B8B8' }}
+                value={eventsValue}
+                onChange={({ label }) => {
+                  setEventsValue(label)
+                }}
+              />
+            </View>
           </View>
-        </View>
 
-        <View style={styles.items}>
-          <Text style={styles.itemText}>重量</Text>
-          <TextInput
-            style={styles.itemInput}
-            placeholder='重量'
-            autoCapitalize='none'
-            keyboardType='number-pad'
-            value={weightValue}
-            onChangeText={(value) => { setWeightValue(value) }}
-          >
-          </TextInput>
-        </View>
+          <View style={styles.items}>
+            <Text style={styles.itemText}>重量</Text>
+            <TextInput
+              style={styles.itemInput}
+              placeholder='重量'
+              autoCapitalize='none'
+              keyboardType='number-pad'
+              value={weightValue}
+              onChangeText={(value) => { setWeightValue(value) }}
+            >
+            </TextInput>
+          </View>
 
-        <View style={styles.items}>
-          <Text style={styles.itemText}>重量</Text>
-          <TextInput
-            style={styles.itemInput}
-            placeholder='回数'
-            autoCapitalize='none'
-            keyboardType='number-pad'
-            value={setValue}
-            onChangeText={(value) => { setSetValue(value) }}
-          >
-          </TextInput>
-        </View>
+          <View style={styles.items}>
+            <Text style={styles.itemText}>重量</Text>
+            <TextInput
+              style={styles.itemInput}
+              placeholder='回数'
+              autoCapitalize='none'
+              keyboardType='number-pad'
+              value={setValue}
+              onChangeText={(value) => { setSetValue(value) }}
+            >
+            </TextInput>
+          </View>
 
-        <OblongButton
-          style={{ marginVertical: 40 }}
-          onPress={() => { void handlePress(date, partsValue, eventsValue, weightValue, setValue) }}>
-          登録
-        </OblongButton>
+          <OblongButton
+            style={{ marginVertical: 40 }}
+            onPress={() => { void handlePress(date, partsValue, eventsValue, weightValue, setValue) }}>
+            登録
+          </OblongButton>
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   )
 }
 

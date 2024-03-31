@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Alert, TextInput } from 'react-native'
+import { View, Text, StyleSheet, Alert, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native'
 
 // firebase
 import { auth } from '../../config'
@@ -48,27 +48,33 @@ const DeleteAccount = (): JSX.Element => {
   const [password, setPassword] = useState('')
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>注意事項</Text>
-      <Text>アカウントを削除されますと、今まで記録したデータが全て削除され、復元もできなくなります。</Text>
-      <Text>間違って削除した場合でも、アカウントの復旧はできませんのでご了承ください。</Text>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss()
+      }}
+    >
+      <View style={styles.container}>
+        <Text style={styles.title}>注意事項</Text>
+        <Text>アカウントを削除されますと、今まで記録したデータが全て削除され、復元もできなくなります。</Text>
+        <Text>間違って削除した場合でも、アカウントの復旧はできませんのでご了承ください。</Text>
 
-      <View style={styles.password}>
-        <Text>確認用パスワード</Text>
-        <TextInput
-          style={styles.textInput}
-          autoCapitalize='none'
-          secureTextEntry
-          value={password}
-          onChangeText={(value) => { setPassword(value) }}
-          >
-        </TextInput>
-      </View>
+        <View style={styles.password}>
+          <Text>確認用パスワード</Text>
+          <TextInput
+            style={styles.textInput}
+            autoCapitalize='none'
+            secureTextEntry
+            value={password}
+            onChangeText={(value) => { setPassword(value) }}
+            >
+          </TextInput>
+        </View>
 
-      <View style={styles.button}>
-        <LandscapeButton onPress={() => { onDelete(password) }}>アカウントを削除する</LandscapeButton>
+        <View style={styles.button}>
+          <LandscapeButton onPress={() => { onDelete(password) }}>アカウントを削除する</LandscapeButton>
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   )
 }
 

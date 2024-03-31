@@ -1,6 +1,6 @@
 import { router } from 'expo-router'
 import { useState } from 'react'
-import { View, Text, StyleSheet, TextInput, Alert } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native'
 
 // firebase
 import { createUserWithEmailAndPassword } from 'firebase/auth'
@@ -29,39 +29,45 @@ const SignupMail = (): JSX.Element => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   return (
-    <View style={styles.container}>
-      <View style={styles.contents}>
-        <View style={styles.items}>
-          <Text style={styles.itemText}>メールアドレス</Text>
-          <TextInput
-            style={styles.itemTextInput}
-            placeholder='Email address'
-            autoCapitalize='none'
-            keyboardType='email-address'
-            textContentType='emailAddress'
-            value={email}
-            onChangeText={(value) => { setEmail(value) }}
-          >
-          </TextInput>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss()
+      }}
+    >
+      <View style={styles.container}>
+        <View style={styles.contents}>
+          <View style={styles.items}>
+            <Text style={styles.itemText}>メールアドレス</Text>
+            <TextInput
+              style={styles.itemTextInput}
+              placeholder='Email address'
+              autoCapitalize='none'
+              keyboardType='email-address'
+              textContentType='emailAddress'
+              value={email}
+              onChangeText={(value) => { setEmail(value) }}
+            >
+            </TextInput>
+          </View>
+          <View style={styles.items}>
+            <Text style={styles.itemText}>パスワード</Text>
+            <TextInput
+              style={styles.itemTextInput}
+              placeholder='Password'
+              autoCapitalize='none'
+              secureTextEntry
+              textContentType='password'
+              value={password}
+              onChangeText={(value) => { setPassword(value) }}
+            >
+            </TextInput>
+          </View>
+          <OblongButton style={{ marginVertical: 40 }} onPress={() => { handlePress(email, password) }}>
+            新規登録
+          </OblongButton>
         </View>
-        <View style={styles.items}>
-          <Text style={styles.itemText}>パスワード</Text>
-          <TextInput
-            style={styles.itemTextInput}
-            placeholder='Password'
-            autoCapitalize='none'
-            secureTextEntry
-            textContentType='password'
-            value={password}
-            onChangeText={(value) => { setPassword(value) }}
-          >
-          </TextInput>
-        </View>
-        <OblongButton style={{ marginVertical: 40 }} onPress={() => { handlePress(email, password) }}>
-          新規登録
-        </OblongButton>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   )
 }
 

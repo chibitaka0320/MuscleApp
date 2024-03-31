@@ -57,6 +57,7 @@ const EditPassword = (): JSX.Element => {
             placeholder='現在のパスワード'
             autoCapitalize='none'
             secureTextEntry={toggleA}
+            autoFocus
             value={passwordA}
             onChangeText={(value) => {
               setPasswordA(value)

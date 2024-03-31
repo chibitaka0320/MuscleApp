@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { View, Text, StyleSheet, TextInput, Alert } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 
 // components
@@ -51,43 +51,49 @@ const editEmail = (): JSX.Element => {
   const [newEmail, setNewEmail] = useState('')
   const [password, setPassword] = useState('')
   return (
-    <View style={styles.container}>
-      <View style={styles.item}>
-        <Text>現在のメールアドレス</Text>
-        <TextInput
-          style={styles.text}
-          editable={false}
-        >{currentEmail}
-        </TextInput>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss()
+      }}
+    >
+      <View style={styles.container}>
+        <View style={styles.item}>
+          <Text>現在のメールアドレス</Text>
+          <TextInput
+            style={styles.text}
+            editable={false}
+          >{currentEmail}
+          </TextInput>
+        </View>
+        <View style={styles.item}>
+          <Text>新しいメールアドレス</Text>
+          <TextInput
+            style={styles.textInput}
+            autoFocus
+            autoCapitalize='none'
+            value={newEmail}
+            onChangeText={(value) => { setNewEmail(value) }}
+            keyboardType='email-address'
+            textContentType='emailAddress'
+            >
+          </TextInput>
+        </View>
+        <View style={styles.item}>
+          <Text>パスワード</Text>
+          <TextInput
+            style={styles.textInput}
+            autoCapitalize='none'
+            secureTextEntry
+            value={password}
+            onChangeText={(value) => { setPassword(value) }}
+            >
+          </TextInput>
+        </View>
+        <View style={styles.button}>
+          <LandscapeButton onPress={() => { void handlePress(currentEmail, newEmail, password) }} >変更</LandscapeButton>
+        </View>
       </View>
-      <View style={styles.item}>
-        <Text>新しいメールアドレス</Text>
-        <TextInput
-          style={styles.textInput}
-          autoFocus
-          autoCapitalize='none'
-          value={newEmail}
-          onChangeText={(value) => { setNewEmail(value) }}
-          keyboardType='email-address'
-          textContentType='emailAddress'
-          >
-        </TextInput>
-      </View>
-      <View style={styles.item}>
-        <Text>パスワード</Text>
-        <TextInput
-          style={styles.textInput}
-          autoCapitalize='none'
-          secureTextEntry
-          value={password}
-          onChangeText={(value) => { setPassword(value) }}
-          >
-        </TextInput>
-      </View>
-      <View style={styles.button}>
-        <LandscapeButton onPress={() => { void handlePress(currentEmail, newEmail, password) }} >変更</LandscapeButton>
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   )
 }
 

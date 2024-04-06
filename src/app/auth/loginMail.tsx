@@ -26,6 +26,10 @@ const signup = (): void => {
   router.replace('auth/signupMail')
 }
 
+const resetPass = (): void => {
+  router.push('auth/resettingPass')
+}
+
 const LoginMail = (): JSX.Element => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
@@ -66,12 +70,17 @@ const LoginMail = (): JSX.Element => {
           <OblongButton style={{ marginVertical: 40 }} onPress={() => { handlePress(email, password) }}>
             ログイン
           </OblongButton>
-          <View style={styles.signupTrans}>
-            <View>
+          <View style={styles.trans}>
+            {/* <View>
               <Text>アカウントをお持ちでない場合</Text>
-            </View>
-            <TouchableOpacity style={styles.signupLink} onPress={signup}>
-              <Text style={styles.signupLinkText}>ご登録はこちら</Text>
+            </View> */}
+            <TouchableOpacity style={styles.transLink} onPress={signup}>
+              <Text style={styles.transLinkText}>アカウントをお持ちでない場合</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.trans}>
+            <TouchableOpacity style={styles.transLink} onPress={resetPass}>
+              <Text style={styles.transLinkText}>パスワードを忘れ場場合</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -103,15 +112,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 10
   },
-  signupTrans: {
+  trans: {
     marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'center'
   },
-  signupLink: {
+  transLink: {
     marginLeft: 10
   },
-  signupLinkText: {
+  transLinkText: {
     fontWeight: 'bold'
   }
 })

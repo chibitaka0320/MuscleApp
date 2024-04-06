@@ -85,14 +85,14 @@ const Eating = (props: Props): JSX.Element => {
       <View style={styles.item}>
         <CalorieGraph data={eatSumData} goalKcal={goalKcal} goalPFC={goalPFC}/>
       </View>
-      <View style={styles.item}>
+      <View style={[styles.item, { marginBottom: 150 }]}>
         {(eatData?.length > 0)
           ? (
               <FlatList
                 data={eatData}
                 renderItem={({ item }) => (
                   <TouchableOpacity style={styles.eatContent} onPress={() => { handlePress(item, date) }}>
-                    <Text style={styles.content}>{item.name}</Text>
+                    <Text style={styles.content} numberOfLines={1}>{item.name}</Text>
                     <Text style={styles.total}>{item.total} kcal</Text>
                     <Text style={styles.protein}>{calcProteinGram(item.total, item.protein)} g</Text>
                     <Text style={styles.fat}>{calcFatGram(item.total, item.fat)} g</Text>
@@ -164,18 +164,22 @@ const styles = StyleSheet.create({
     height: 70
   },
   content: {
-    width: '35%',
+    marginRight: 8,
+    width: '31%',
     fontSize: FONTSIZE
   },
   total: {
-    width: '23%',
+    marginRight: 5,
+    width: '21%',
     fontSize: FONTSIZE
   },
   protein: {
+    marginRight: 5,
     width: '14%',
     fontSize: FONTSIZE
   },
   fat: {
+    marginRight: 5,
     width: '14%',
     fontSize: FONTSIZE
   },

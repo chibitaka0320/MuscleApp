@@ -10,7 +10,7 @@ import { OblongButton } from '../../components/OblongButton'
 
 // firebase
 import { auth, db } from '../../config'
-import { addDoc, collection } from 'firebase/firestore'
+import { addDoc, collection, getDocs } from 'firebase/firestore'
 
 // data
 import { eventMenu, partsMenu } from '../../data/TrainingMenu'
@@ -18,9 +18,19 @@ import { eventMenu, partsMenu } from '../../data/TrainingMenu'
 // other
 import { Dropdown } from 'react-native-element-dropdown'
 
+interface Props {
+  label: string
+}
+
 const handlePress = async (date: string, parts: string, events: string, weight: string, set: string): Promise<void> => {
   if (auth.currentUser === null) { return }
-  if ((parts !== '' && events !== '' && weight !== '' && set !== '')) {
+  if ((parts === '' || events === '' || weight === '' || set === '')) {
+    Alert.alert('未入力事項があります')
+  } else if (Number(weight) > 999) {
+    Alert.alert('正しい重量を入力してください')
+  } else if (Number(set) > 999) {
+    Alert.alert('正しい回数を入力してください')
+  } else {
     const ref = collection(db, `users/${auth.currentUser.uid}/training`)
     try {
       await addDoc(ref, {
@@ -35,8 +45,6 @@ const handlePress = async (date: string, parts: string, events: string, weight: 
     } catch {
       Alert.alert('情報に誤りがあります')
     }
-  } else {
-    Alert.alert('未入力事項があります')
   }
 }
 
@@ -51,12 +59,79 @@ const CreateTraining = (): JSX.Element | null => {
   const [eventsValue, setEventsValue] = useState<string>(events ?? '')
   const [weightValue, setWeightValue] = useState<string>('')
   const [setValue, setSetValue] = useState<string>('')
+  const [chestMenu, setChestMenu] = useState<Props[]>([])
+  const [backMenu, setBackMenu] = useState<Props[]>([])
+  const [shoulderMenu, setShoulderMenu] = useState<Props[]>([])
+  const [armMenu, setArmMenu] = useState<Props[]>([])
+  const [absMenu, setAbsMenu] = useState<Props[]>([])
+  const [legMenu, setLegMenu] = useState<Props[]>([])
+  const [otherMenu, setOtherMenu] = useState<Props[]>([])
 
   useEffect(() => {
     navigation.setOptions({
       headerTitle: `${date}`
     })
   }, [])
+
+  useEffect(() => {
+    if (auth.currentUser === null) return
+    const ref = collection(db, `users/${auth.currentUser.uid}/data`)
+    const chest: Props[] = []
+    const back: Props[] = []
+    const shoulder: Props[] = []
+    const arm: Props[] = []
+    const abs: Props[] = []
+    const leg: Props[] = []
+    const other: Props[] = []
+    getDocs(ref)
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          const { parts, event } = doc.data()
+          if (parts === '胸') {
+            chest.push({ label: event })
+          } else if (parts === '背中') {
+            back.push({ label: event })
+          } else if (parts === '肩') {
+            shoulder.push({ label: event })
+          } else if (parts === '腕') {
+            arm.push({ label: event })
+          } else if (parts === '腹筋') {
+            abs.push({ label: event })
+          } else if (parts === '足') {
+            leg.push({ label: event })
+          } else if (parts === 'その他') {
+            other.push({ label: event })
+          }
+          setChestMenu(chest)
+          setBackMenu(back)
+          setShoulderMenu(shoulder)
+          setArmMenu(arm)
+          setAbsMenu(abs)
+          setLegMenu(leg)
+          setOtherMenu(other)
+        })
+      })
+      .catch(() => {})
+  }, [])
+
+  const myMenu = (partsValue: string): Props[] => {
+    if (partsValue === '胸') {
+      return chestMenu
+    } else if (partsValue === '背中') {
+      return backMenu
+    } else if (partsValue === '肩') {
+      return shoulderMenu
+    } else if (partsValue === '腕') {
+      return armMenu
+    } else if (partsValue === '腹筋') {
+      return absMenu
+    } else if (partsValue === '足') {
+      return legMenu
+    } else if (partsValue === 'その他') {
+      return otherMenu
+    }
+    return []
+  }
 
   return (
     <TouchableWithoutFeedback
@@ -89,7 +164,7 @@ const CreateTraining = (): JSX.Element | null => {
             <Text style={styles.itemText}>種目</Text>
             <View style={styles.itemInput}>
               <Dropdown
-                data={eventMenu(partsValue)}
+                data={myMenu(partsValue).concat(eventMenu(partsValue))}
                 maxHeight={250}
                 labelField="label"
                 valueField="label"
@@ -117,7 +192,7 @@ const CreateTraining = (): JSX.Element | null => {
           </View>
 
           <View style={styles.items}>
-            <Text style={styles.itemText}>重量</Text>
+            <Text style={styles.itemText}>回数</Text>
             <TextInput
               style={styles.itemInput}
               placeholder='回数'

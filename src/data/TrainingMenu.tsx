@@ -94,6 +94,10 @@ export const eventMenu = (partsValue: string): Props[] => {
       { label: 'シングルレッグプレス' },
       { label: 'ケーブルドンキーキック' }
     ]
+  } else if (partsValue === 'その他') {
+    event = [
+      { label: 'ランジ' }
+    ]
   }
   return event
 }

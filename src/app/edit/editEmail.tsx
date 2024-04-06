@@ -6,38 +6,48 @@ import { router, useLocalSearchParams } from 'expo-router'
 import { LandscapeButton } from '../../components/LandscapeButton'
 
 // firebase
-import { EmailAuthProvider, reauthenticateWithCredential, signOut, verifyBeforeUpdateEmail } from 'firebase/auth'
+import { EmailAuthProvider, fetchSignInMethodsForEmail, reauthenticateWithCredential, signOut, verifyBeforeUpdateEmail } from 'firebase/auth'
 import { auth } from '../../config'
 
-const handlePress = async (currentEmail: string, newEmail: string, password: string): Promise<void> => {
+const handlePress = async (newEmail: string, password: string): Promise<void> => {
   const user = auth.currentUser
-  const credential = EmailAuthProvider.credential(currentEmail, password)
   if (user === null) return
+  if (user.email === null) return
+  const credential = EmailAuthProvider.credential(user?.email, password)
   reauthenticateWithCredential(user, credential)
     .then(() => {
-      verifyBeforeUpdateEmail(user, newEmail)
-        .then(() => {
-          Alert.alert('新しいメールアドレスにメールを送信しました', '24時間以内にメールを認証し、再ログインしてください', [
-            {
-              text: 'OK',
-              onPress: () => {
-                signOut(auth)
-                  .then(() => {
-                    while (router.canGoBack()) {
-                      router.back()
+      fetchSignInMethodsForEmail(auth, newEmail)
+        .then((result) => {
+          if (result.length > 0) {
+            Alert.alert('新しいメールアドレスはすでに使われています。')
+          } else {
+            verifyBeforeUpdateEmail(user, newEmail)
+              .then(async () => {
+                Alert.alert('新しいメールアドレスにメールを送信しました', '24時間以内にメールを認証し、再ログインしてください', [
+                  {
+                    text: 'OK',
+                    onPress: () => {
+                      signOut(auth)
+                        .then(() => {
+                          while (router.canGoBack()) {
+                            router.back()
+                          }
+                          router.replace('/auth/loginMail')
+                        })
+                        .catch(() => {
+                          Alert.alert('エラー')
+                        })
                     }
-                    router.replace('/auth/loginMail')
-                  })
-                  .catch(() => {
-                    Alert.alert('エラー')
-                  })
-              }
-            }
-          ])
-          console.log('success')
+                  }
+                ])
+              })
+              .catch((error: any) => {
+                console.log(error)
+                Alert.alert('メールアドレスの送信に失敗しました。')
+              })
+          }
         })
-        .catch((error: any) => {
-          console.log(error)
+        .catch(() => {
           Alert.alert('メールアドレスを正しく入力してください')
         })
     })
@@ -90,7 +100,7 @@ const editEmail = (): JSX.Element => {
           </TextInput>
         </View>
         <View style={styles.button}>
-          <LandscapeButton onPress={() => { void handlePress(currentEmail, newEmail, password) }} >変更</LandscapeButton>
+          <LandscapeButton onPress={() => { void handlePress(newEmail, password) }} >変更</LandscapeButton>
         </View>
       </View>
     </TouchableWithoutFeedback>

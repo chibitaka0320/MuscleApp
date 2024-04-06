@@ -9,6 +9,18 @@ export const BackButton = (): JSX.Element => {
   )
 }
 
+export const HomeButton = (): JSX.Element => {
+  return (
+    <TouchableOpacity onPress={() => {
+      while (router.canGoBack()) {
+        router.back()
+      }
+    }}>
+      <Text style={styles.text}>戻る</Text>
+    </TouchableOpacity>
+  )
+}
+
 const styles = StyleSheet.create({
   text: {
     fontSize: 16,

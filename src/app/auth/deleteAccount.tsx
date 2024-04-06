@@ -1,7 +1,8 @@
 import { View, Text, StyleSheet, Alert, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native'
 
 // firebase
-import { auth } from '../../config'
+import { auth, db } from '../../config'
+import { deleteDoc, doc } from 'firebase/firestore'
 
 // components
 import { LandscapeButton } from '../../components/LandscapeButton'
@@ -20,21 +21,25 @@ const onDelete = (password: string): void => {
       onPress: () => {
         const user = auth.currentUser
         if (user?.email === null || user?.email === undefined) return
+        const delDoc = doc(db, 'users', user.uid)
         const credential = EmailAuthProvider.credential(user?.email, password)
-        if (auth.currentUser === null) return
-        reauthenticateWithCredential(auth.currentUser, credential)
+        const fetch = async (): Promise<void> => {
+          await deleteDoc(delDoc)
+        }
+        reauthenticateWithCredential(user, credential)
           .then(() => {
             deleteUser(user)
               .then(() => {
                 while (router.canGoBack()) {
                   router.back()
                 }
-                router.replace('/auth/loginMail')
+                router.replace('/auth/signupMail')
               })
               .catch((error: any) => {
                 console.log(error)
                 Alert.alert('アカウントの削除に失敗しました')
               })
+            void fetch()
           })
           .catch(() => {
             Alert.alert('パスワードが違います')

@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router'
-import { BackButton } from '../components/BackButton'
+import { BackButton, HomeButton } from '../components/BackButton'
 
 const Layout = (): JSX.Element => {
   return (
@@ -22,6 +22,14 @@ const Layout = (): JSX.Element => {
           // presentation: 'modal',
           // headerLeft: () => { return (<BackButton/>) },
           headerTitle: '新規登録'
+        }}
+      />
+      <Stack.Screen
+        name='auth/resettingPass'
+        options={{
+          // presentation: 'modal',
+          headerLeft: () => { return (<BackButton/>) },
+          headerTitle: 'パスワード再設定'
         }}
       />
       <Stack.Screen
@@ -95,6 +103,19 @@ const Layout = (): JSX.Element => {
         options={{
           presentation: 'fullScreenModal',
           headerLeft: () => { return (<BackButton/>) }
+        }}
+      />
+      <Stack.Screen
+        name='create/createEvent'
+        options={{
+          presentation: 'modal',
+          headerLeft: () => { return (<BackButton/>) }
+        }}
+      />
+      <Stack.Screen
+        name='eventList'
+        options={{
+          headerLeft: () => { return (<HomeButton/>) }
         }}
       />
     </Stack>

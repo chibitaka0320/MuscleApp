@@ -18,8 +18,12 @@ const handlePress = async (date: string, name: string, total: string, protein: n
   if (auth.currentUser === null) { return }
   if (name === '') {
     Alert.alert('食事名を入力してください')
+  } else if (name.length > 15) {
+    Alert.alert('食事名は15文字以内で入力してください')
   } else if (total === '') {
     Alert.alert('総カロリーを入力してください')
+  } else if (Number(total) >= 10000) {
+    Alert.alert('正しい総カロリーを入力してください')
   } else if (protein + fat + carbo !== 100) {
     Alert.alert('合計を100%にしてください')
   } else {

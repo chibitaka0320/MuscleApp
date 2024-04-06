@@ -32,6 +32,14 @@ const handlePress = async (
   startDate: Date,
   endDate: Date,
   pfc: string): Promise<void> => {
+  if (goalWeight !== '' && (Number(goalWeight) < 10 || Number(goalWeight) > 250)) {
+    Alert.alert('目標体重を正しく入力してください')
+    return
+  }
+  if (startDate > endDate) {
+    Alert.alert('開始日と終了日を正しく入力してください')
+    return
+  }
   if (auth.currentUser === null) { return }
   const userDoc = doc(db, `users/${auth.currentUser.uid}`)
   const goalKcal = calcGoalKcal(totalConsumed, startDate, endDate, weight, goalWeight)
@@ -45,7 +53,7 @@ const handlePress = async (
       activeLevel,
       basalMetabo,
       totalConsumed,
-      goalWeight,
+      goalWeight: goalWeight === '' ? goalWeight : String(Number(goalWeight).toFixed(1)),
       startDate: !Number.isNaN(startDate.valueOf()) ? startDate : null,
       endDate: !Number.isNaN(endDate.valueOf()) ? endDate : null,
       pfc,
@@ -55,6 +63,12 @@ const handlePress = async (
   } catch {
     Alert.alert('情報に誤りがあります')
   }
+}
+
+const maxDate = (): Date => {
+  const currentDate = new Date()
+  const maxDate = new Date(currentDate.getFullYear() + 5, currentDate.getMonth(), currentDate.getDate())
+  return maxDate
 }
 
 const EditGoal = (): JSX.Element | null => {
@@ -130,6 +144,8 @@ const EditGoal = (): JSX.Element | null => {
             >
             </TextInput>
             <DateTimePickerModal
+              minimumDate={new Date(1900, 0, 1)}
+              maximumDate={maxDate()}
               date={!Number.isNaN(startDate.valueOf()) ? startDate : new Date()}
               isVisible={startPicker}
               mode='date'
@@ -138,6 +154,9 @@ const EditGoal = (): JSX.Element | null => {
                 setStartPicker(false)
               }}
               onCancel={() => { setStartPicker(false) }}
+              locale='ja'
+              cancelTextIOS='キャンセル'
+              confirmTextIOS='OK'
             />
           </View>
 
@@ -153,6 +172,8 @@ const EditGoal = (): JSX.Element | null => {
             >
             </TextInput>
             <DateTimePickerModal
+              minimumDate={new Date(1900, 0, 1)}
+              maximumDate={maxDate()}
               date={!Number.isNaN(endDate.valueOf()) ? endDate : new Date()}
               isVisible={endPicker}
               mode='date'
@@ -161,6 +182,9 @@ const EditGoal = (): JSX.Element | null => {
                 setEndPicker(false)
               }}
               onCancel={() => { setEndPicker(false) }}
+              locale='ja'
+              cancelTextIOS='キャンセル'
+              confirmTextIOS='OK'
             />
           </View>
 
@@ -242,7 +266,8 @@ const styles = StyleSheet.create({
     paddingLeft: 10
   },
   buttons: {
-    marginVertical: 20,
+    marginTop: 20,
+    marginBottom: 120,
     alignItems: 'center'
   }
 })

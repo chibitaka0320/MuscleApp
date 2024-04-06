@@ -14,6 +14,9 @@ const onTraining = (date: string): void => {
 const onEating = (date: string): void => {
   router.replace({ pathname: '/create/createEat', params: { date } })
 }
+const onEventList = (): void => {
+  router.replace({ pathname: 'eventList' })
+}
 
 const createMenu = (): JSX.Element => {
   const { date } = useLocalSearchParams()
@@ -57,6 +60,15 @@ const createMenu = (): JSX.Element => {
             }}
           >
             <MaterialIcons name='set-meal' size={30}/>
+          </CircleButton>
+        </View>
+        <View>
+          <Text style={styles.menuTitle}>種目リスト</Text>
+          <CircleButton
+            style={styles.circleButton}
+            onPress={() => { onEventList() }}
+          >
+            <MaterialIcons name='list-alt' size={30}/>
           </CircleButton>
         </View>
       </View>

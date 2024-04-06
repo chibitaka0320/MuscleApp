@@ -30,6 +30,18 @@ const handlePress = async (
   startDate: Date,
   endDate: Date,
   pfc: string): Promise<void> => {
+  if (userName.length > 15) {
+    Alert.alert('ユーザー名は15文字以内で入力してください')
+    return
+  }
+  if (height !== '' && (Number(height) < 50 || Number(height) > 250)) {
+    Alert.alert('身長を正しく入力してください')
+    return
+  }
+  if (weight !== '' && (Number(weight) < 10 || Number(weight) > 250)) {
+    Alert.alert('体重を正しく入力してください')
+    return
+  }
   if (auth.currentUser === null) { return }
   const userDoc = doc(db, `users/${auth.currentUser.uid}`)
   const timestampBirth = Timestamp.fromDate(birthday)
@@ -39,8 +51,8 @@ const handlePress = async (
   try {
     await setDoc(userDoc, {
       userName,
-      height,
-      weight,
+      height: height === '' ? height : String(Number(height).toFixed(1)),
+      weight: weight === '' ? weight : String(Number(weight).toFixed(1)),
       birthday: !Number.isNaN(birthday.valueOf()) ? birthday : null,
       gender,
       activeLevel,
@@ -147,10 +159,12 @@ const EditProf = (): JSX.Element | null => {
               placeholder='未設定'
               autoCapitalize='none'
               value={formDate(birthday)}
-              onPressIn={() => { setDatePickerVisible(true) }}
+              onPressOut={() => { setDatePickerVisible(true) }}
             >
             </TextInput>
             <DateTimePickerModal
+              minimumDate={new Date(1900, 0, 1)}
+              maximumDate={new Date()}
               date={!Number.isNaN(birthday.valueOf()) ? birthday : new Date(2000, 0, 1)}
               isVisible={datePickerVisible}
               mode='date'
@@ -159,6 +173,9 @@ const EditProf = (): JSX.Element | null => {
                 setDatePickerVisible(false)
               }}
               onCancel={() => { setDatePickerVisible(false) }}
+              locale='ja'
+              cancelTextIOS='キャンセル'
+              confirmTextIOS='OK'
             />
           </View>
 
@@ -252,7 +269,8 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   buttons: {
-    marginVertical: 20,
+    marginTop: 20,
+    marginBottom: 160,
     alignItems: 'center'
   }
 })

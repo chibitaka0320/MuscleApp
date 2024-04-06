@@ -17,10 +17,12 @@ const handlePress = (email: string, password: string): void => {
       }
       router.replace('/home/training')
     })
-    .catch((error) => {
+    .catch((error: any) => {
       const { message } = error
       if (message === 'Firebase: Error (auth/invalid-email).') {
         Alert.alert('メールアドレスを正しく入力してください')
+      } else if (message === 'Firebase: Error (auth/email-already-in-use).') {
+        Alert.alert('メールアドレスはすでに登録されています')
       } else {
         Alert.alert('パスワードを正しく入力してください')
       }
@@ -72,11 +74,8 @@ const SignupMail = (): JSX.Element => {
             新規登録
           </OblongButton>
           <View style={styles.loginTrans}>
-            <View>
-              <Text>すでにアカウントをお持ちの場合</Text>
-            </View>
             <TouchableOpacity style={styles.loginLink} onPress={login}>
-              <Text style={styles.loginLinkText}>ログインはこちら</Text>
+              <Text style={styles.loginLinkText}>すでにアカウントをお持ちの場合</Text>
             </TouchableOpacity>
           </View>
         </View>

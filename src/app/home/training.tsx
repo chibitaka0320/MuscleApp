@@ -50,7 +50,7 @@ const Training = (props: Props): JSX.Element => {
           />
           )
         : (
-          <View style={styles.nonData}><Text>データなし</Text></View>
+          <View style={styles.item}><Text>データなし</Text></View>
           )
       }
     </View>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  nonData: {
+  item: {
     backgroundColor: '#FFFFFF',
     marginHorizontal: 15,
     marginTop: 30,

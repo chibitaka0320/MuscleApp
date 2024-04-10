@@ -4,12 +4,13 @@ interface Props {
   children: string
   onPress?: () => void
   style?: TextStyle
+  visible?: boolean
 }
 
 export const LandscapeButton = (props: Props): JSX.Element => {
-  const { children, onPress, style } = props
+  const { children, onPress, style, visible } = props
   return (
-    <TouchableOpacity style={[styles.button, style]} onPress={onPress} >
+    <TouchableOpacity style={[styles.button, style]} onPress={onPress} disabled={visible ?? false}>
       <Text>{children}</Text>
     </TouchableOpacity>
   )

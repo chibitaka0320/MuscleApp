@@ -66,14 +66,18 @@ const Layout = (): JSX.Element => {
       <Stack.Screen
         name='create/createEat'
         options={{
-          headerTitle: 'メールアドレス変更',
+          headerLeft: () => { return (<BackButton/>) }
+        }}
+      />
+      <Stack.Screen
+        name='create/createBody'
+        options={{
           headerLeft: () => { return (<BackButton/>) }
         }}
       />
       <Stack.Screen
         name='create/createTraining'
         options={{
-          headerTitle: 'メールアドレス変更',
           headerLeft: () => { return (<BackButton/>) }
         }}
       />
@@ -81,6 +85,25 @@ const Layout = (): JSX.Element => {
         name='edit/editEmail'
         options={{
           headerTitle: 'メールアドレス変更',
+          headerLeft: () => { return (<BackButton/>) }
+        }}
+      />
+      <Stack.Screen
+        name='edit/editPassword'
+        options={{
+          headerTitle: 'パスワード変更',
+          headerLeft: () => { return (<BackButton/>) }
+        }}
+      />
+      <Stack.Screen
+        name='edit/editTraining'
+        options={{
+          headerLeft: () => { return (<BackButton/>) }
+        }}
+      />
+      <Stack.Screen
+        name='edit/editEat'
+        options={{
           headerLeft: () => { return (<BackButton/>) }
         }}
       />

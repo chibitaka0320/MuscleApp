@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard, View, TouchableOpacity, Alert } from 'react-native'
+import { StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard, View, TouchableOpacity, Alert, ActivityIndicator, Text } from 'react-native'
 import { FontAwesome6 } from '@expo/vector-icons'
 import { router } from 'expo-router'
 
@@ -10,32 +10,8 @@ import { signInWithEmailAndPassword, updatePassword } from 'firebase/auth'
 // components
 import { LandscapeButton } from '../../components/LandscapeButton'
 
-const onUpdate = (A: string, B: string, C: string): void => {
-  const user = auth.currentUser
-  if (user === null) return
-  if (A === '' || B === '' || C === '') {
-    Alert.alert('未入力事項があります')
-  } else {
-    const userMail = user.email
-    if (userMail === null) return
-    signInWithEmailAndPassword(auth, userMail, A)
-      .then(() => {
-        if (B === C) {
-          updatePassword(user, B).then(() => {
-            Alert.alert('パスワードの変更が完了しました', '', [{
-              text: 'OK', onPress: () => { router.back() }
-            }])
-          }).catch(() => {
-            Alert.alert('新しいパスワードを正しく入力してください')
-          })
-        } else {
-          Alert.alert('確認用のパスワードが一致しません')
-        }
-      })
-      .catch(() => {
-        Alert.alert('現在のパスワードに誤りがあります')
-      })
-  }
+const resetPass = (): void => {
+  router.push('auth/resettingPass')
 }
 
 const EditPassword = (): JSX.Element => {
@@ -45,6 +21,40 @@ const EditPassword = (): JSX.Element => {
   const [passwordB, setPasswordB] = useState('')
   const [toggleC, setToggleC] = useState(true)
   const [passwordC, setPasswordC] = useState('')
+  const [visible, setVisible] = useState(false)
+
+  const onUpdate = (A: string, B: string, C: string): void => {
+    setVisible(true)
+    const user = auth.currentUser
+    if (user === null) return
+    if (A === '' || B === '' || C === '') {
+      Alert.alert('未入力事項があります')
+      setVisible(false)
+    } else {
+      const userMail = user.email
+      if (userMail === null) return
+      signInWithEmailAndPassword(auth, userMail, A)
+        .then(() => {
+          if (B === C) {
+            updatePassword(user, B).then(() => {
+              Alert.alert('パスワードの変更が完了しました', '', [{
+                text: 'OK', onPress: () => { router.back() }
+              }])
+            }).catch(() => {
+              Alert.alert('新しいパスワードを正しく入力してください')
+              setVisible(false)
+            })
+          } else {
+            Alert.alert('確認用のパスワードが一致しません')
+            setVisible(false)
+          }
+        })
+        .catch(() => {
+          Alert.alert('現在のパスワードに誤りがあります')
+          setVisible(false)
+        })
+    }
+  }
 
   return (
     <TouchableWithoutFeedback
@@ -104,9 +114,15 @@ const EditPassword = (): JSX.Element => {
             <FontAwesome6 name={toggleC ? 'eye' : 'eye-slash'} size={22}/>
           </TouchableOpacity>
         </View>
+        <View style={styles.trans}>
+          <TouchableOpacity style={styles.transLink} onPress={resetPass}>
+            <Text style={styles.transLinkText}>パスワードを忘れた場合</Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.button}>
           <LandscapeButton onPress={() => { onUpdate(passwordA, passwordB, passwordC) }}>パスワードを変更</LandscapeButton>
         </View>
+        {visible && <ActivityIndicator style={styles.active}/>}
       </View>
     </TouchableWithoutFeedback>
   )
@@ -116,6 +132,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 30
+  },
+  active: {
+    ...StyleSheet.absoluteFillObject,
+    flex: 1
   },
   item: {
     flexDirection: 'row',
@@ -142,6 +162,17 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 100,
     alignItems: 'center'
+  },
+  trans: {
+    marginTop: 60,
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  transLink: {
+    marginLeft: 10
+  },
+  transLinkText: {
+    fontWeight: 'bold'
   }
 })
 

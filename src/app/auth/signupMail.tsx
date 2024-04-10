@@ -1,6 +1,16 @@
 import { router } from 'expo-router'
 import { useState } from 'react'
-import { View, Text, StyleSheet, TextInput, Alert, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Alert,
+  TouchableWithoutFeedback,
+  Keyboard,
+  TouchableOpacity,
+  ActivityIndicator
+} from 'react-native'
 
 // firebase
 import { createUserWithEmailAndPassword } from 'firebase/auth'
@@ -9,33 +19,37 @@ import { auth } from '../../config'
 // components
 import { OblongButton } from '../../components/OblongButton'
 
-const handlePress = (email: string, password: string): void => {
-  createUserWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      while (router.canGoBack()) {
-        router.back()
-      }
-      router.replace('/home/training')
-    })
-    .catch((error: any) => {
-      const { message } = error
-      if (message === 'Firebase: Error (auth/invalid-email).') {
-        Alert.alert('メールアドレスを正しく入力してください')
-      } else if (message === 'Firebase: Error (auth/email-already-in-use).') {
-        Alert.alert('メールアドレスはすでに登録されています')
-      } else {
-        Alert.alert('パスワードを正しく入力してください')
-      }
-    })
-}
-
 const login = (): void => {
   router.replace('auth/loginMail')
 }
 
 const SignupMail = (): JSX.Element => {
+  const [visible, setVisible] = useState<boolean>(false)
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+
+  const handlePress = (email: string, password: string): void => {
+    setVisible(true)
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        while (router.canGoBack()) {
+          router.back()
+        }
+        router.replace('/home/training')
+      })
+      .catch((error: any) => {
+        const { message } = error
+        if (message === 'Firebase: Error (auth/invalid-email).') {
+          Alert.alert('メールアドレスを正しく入力してください')
+        } else if (message === 'Firebase: Error (auth/email-already-in-use).') {
+          Alert.alert('メールアドレスはすでに登録されています')
+        } else {
+          Alert.alert('パスワードを正しく入力してください')
+        }
+        setVisible(false)
+      })
+  }
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -79,6 +93,7 @@ const SignupMail = (): JSX.Element => {
             </TouchableOpacity>
           </View>
         </View>
+        {visible && <ActivityIndicator style={styles.active}/>}
       </View>
     </TouchableWithoutFeedback>
   )
@@ -91,6 +106,10 @@ const styles = StyleSheet.create({
   contents: {
     flex: 1,
     margin: 30
+  },
+  active: {
+    ...StyleSheet.absoluteFillObject,
+    flex: 1
   },
   items: {
     marginVertical: 20

@@ -14,6 +14,9 @@ const onTraining = (date: string): void => {
 const onEating = (date: string): void => {
   router.replace({ pathname: '/create/createEat', params: { date } })
 }
+const onBody = (date: string): void => {
+  router.replace({ pathname: '/create/createBody', params: { date } })
+}
 const onEventList = (): void => {
   router.replace({ pathname: 'eventList' })
 }
@@ -24,19 +27,7 @@ const createMenu = (): JSX.Element => {
   return (
     <View style={styles.container}>
       <View style={styles.menuContainer}>
-        {/* <View>
-          <Text style={styles.menuTitle}>ボディ</Text>
-          <CircleButton
-            style={styles.circleButton}
-            onPress={() => {
-              if (typeof date === 'string') {
-                onBody(date)
-              }
-            }}>
-            <FontAwesome5 name='camera' size={30}/>
-          </CircleButton>
-        </View> */}
-        <View>
+        <View style={styles.item}>
           <Text style={styles.menuTitle}>トレーニング</Text>
           <CircleButton
             style={styles.circleButton}
@@ -49,7 +40,7 @@ const createMenu = (): JSX.Element => {
             <FontAwesome5 name='dumbbell' size={30}/>
           </CircleButton>
         </View>
-        <View>
+        <View style={styles.item}>
           <Text style={styles.menuTitle}>食事</Text>
           <CircleButton
             style={styles.circleButton}
@@ -62,7 +53,19 @@ const createMenu = (): JSX.Element => {
             <MaterialIcons name='set-meal' size={30}/>
           </CircleButton>
         </View>
-        <View>
+        <View style={styles.item}>
+          <Text style={styles.menuTitle}>ボディ</Text>
+          <CircleButton
+            style={styles.circleButton}
+            onPress={() => {
+              if (typeof date === 'string') {
+                onBody(date)
+              }
+            }}>
+            <FontAwesome5 name='camera' size={30}/>
+          </CircleButton>
+        </View>
+        <View style={styles.item}>
           <Text style={styles.menuTitle}>種目リスト</Text>
           <CircleButton
             style={styles.circleButton}
@@ -79,13 +82,18 @@ const createMenu = (): JSX.Element => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center'
   },
   menuContainer: {
-    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'center'
+    flexWrap: 'wrap',
+    paddingBottom: 10
+  },
+  item: {
+    width: '50%',
+    alignItems: 'center',
+    paddingBottom: 60
   },
   menuTitle: {
     textAlign: 'center',

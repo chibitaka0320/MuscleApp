@@ -1,6 +1,6 @@
 import { router } from 'expo-router'
 import { useState } from 'react'
-import { View, Text, StyleSheet, TextInput, Alert, TouchableWithoutFeedback, Keyboard, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Alert, TouchableWithoutFeedback, Keyboard, TouchableOpacity, ActivityIndicator } from 'react-native'
 
 // firebase
 import { signInWithEmailAndPassword } from 'firebase/auth'
@@ -8,19 +8,6 @@ import { auth } from '../../config'
 
 // components
 import { OblongButton } from '../../components/OblongButton'
-
-const handlePress = (email: string, password: string): void => {
-  signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      while (router.canGoBack()) {
-        router.back()
-      }
-      router.replace('/home/training')
-    })
-    .catch(() => {
-      Alert.alert('ログイン情報に誤りがあります')
-    })
-}
 
 const signup = (): void => {
   router.replace('auth/signupMail')
@@ -33,6 +20,23 @@ const resetPass = (): void => {
 const LoginMail = (): JSX.Element => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const [visible, setVisible] = useState(false)
+
+  const handlePress = (): void => {
+    setVisible(true)
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        while (router.canGoBack()) {
+          router.back()
+        }
+        router.replace('/home/training')
+      })
+      .catch(() => {
+        Alert.alert('ログイン情報に誤りがあります')
+        setVisible(false)
+      })
+  }
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -67,7 +71,7 @@ const LoginMail = (): JSX.Element => {
             >
             </TextInput>
           </View>
-          <OblongButton style={{ marginVertical: 40 }} onPress={() => { handlePress(email, password) }}>
+          <OblongButton style={{ marginVertical: 40 }} onPress={() => { handlePress() }}>
             ログイン
           </OblongButton>
           <View style={styles.trans}>
@@ -84,6 +88,7 @@ const LoginMail = (): JSX.Element => {
             </TouchableOpacity>
           </View>
         </View>
+        {visible && <ActivityIndicator style={styles.active}/>}
       </View>
     </TouchableWithoutFeedback>
   )
@@ -96,6 +101,10 @@ const styles = StyleSheet.create({
   contents: {
     flex: 1,
     margin: 30
+  },
+  active: {
+    ...StyleSheet.absoluteFillObject,
+    flex: 1
   },
   items: {
     marginVertical: 20

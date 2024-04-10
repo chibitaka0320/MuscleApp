@@ -13,6 +13,7 @@ import { getNow } from '../../components/GetNowDate'
 // screen
 import Training from './training'
 import Eating from './eating'
+import Body from './body'
 
 // other
 import { Entypo, Feather } from '@expo/vector-icons'
@@ -44,8 +45,8 @@ const Layout = (): JSX.Element => {
       <CalendarProvider
         date={today}
         showTodayButton
-        onDateChanged={(date: string) => {
-          setSelectDate(date)
+        onDateChanged={(date) => {
+          setSelectDate(date.toString())
         } }
         todayBottomMargin={75}
       >
@@ -62,6 +63,12 @@ const Layout = (): JSX.Element => {
             options={{ tabBarLabel: '食事' }}
           >
             {() => <Eating date={selectDate}/> }
+          </Tab.Screen>
+          <Tab.Screen
+            name='Body'
+            options={{ tabBarLabel: 'ボディー' }}
+          >
+            {() => <Body date={selectDate}/> }
           </Tab.Screen>
         </Tab.Navigator>
       </CalendarProvider>

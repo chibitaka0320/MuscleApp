@@ -1,10 +1,10 @@
 // react
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, TextInput, Alert, TouchableOpacity } from 'react-native'
 import Slider from '@react-native-community/slider'
 
 // navigator
-import { router, useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 
 // compnents
 import { calcCarboGram, calcFatGram, calcKcal, calcProteinGram } from '../../components/Calc'
@@ -69,6 +69,8 @@ const onSlider = (total: string): void => {
 }
 
 const EditEat = (): JSX.Element | null => {
+  const navigation = useNavigation()
+
   const getName = String(useLocalSearchParams().name)
   const getTotal = String(useLocalSearchParams().total)
   const protein = Number(useLocalSearchParams().protein)
@@ -82,6 +84,12 @@ const EditEat = (): JSX.Element | null => {
   const [proteinPer, setProteinPer] = useState<number>(protein)
   const [fatPer, setFatPer] = useState<number>(fat)
   const [carboPer, setCarboPer] = useState<number>(carbo)
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: `${date}`
+    })
+  }, [])
 
   return (
     <View style={styles.container}>

@@ -1,22 +1,24 @@
 {
   "expo": {
-    "name": "MuscleApp",
-    "slug": "MuscleApp",
-    "scheme": "MuscleAppScheme",
+    "name": "TREMANE",
+    "slug": "TREMANE",
+    "scheme": "TREMANEScheme",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#4FB9FC"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "jp.app.tremane",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {

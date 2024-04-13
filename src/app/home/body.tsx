@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { View, StyleSheet, Text } from 'react-native'
+import { View, StyleSheet, Text, ScrollView } from 'react-native'
 import ImageModal from 'react-native-image-modal'
 
 // fireabse
@@ -38,7 +38,7 @@ const Body = (props: Props): JSX.Element => {
   }, [date])
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.item}>
         <View>
           <Text style={styles.title}>FRONT</Text>
@@ -74,7 +74,7 @@ const Body = (props: Props): JSX.Element => {
           }
         </View>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 

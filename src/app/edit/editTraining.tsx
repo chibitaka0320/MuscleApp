@@ -7,9 +7,9 @@ import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 
 // firebase
 import { auth, db } from '../../config'
-import { deleteDoc, doc, setDoc } from 'firebase/firestore'
+import { Timestamp, deleteDoc, doc, setDoc } from 'firebase/firestore'
 
-const onUpdate = async (id: string, date: string, parts: string, events: string, weight: string, set: string): Promise<void> => {
+const onUpdate = async (id: string, date: string, parts: string, events: string, weight: string, set: string, createDate: Timestamp): Promise<void> => {
   if (auth.currentUser === null) { return }
   if ((weight !== '' && set !== '')) {
     const editDoc = doc(db, `users/${auth.currentUser.uid}/training`, id)
@@ -19,7 +19,8 @@ const onUpdate = async (id: string, date: string, parts: string, events: string,
         parts,
         events,
         weight,
-        set
+        set,
+        createDate
       })
       router.back()
       router.replace('home/training')
@@ -62,6 +63,7 @@ const EditTraining = (): JSX.Element | null => {
   const events = String(useLocalSearchParams().events)
   const weight = String(useLocalSearchParams().weight)
   const set = String(useLocalSearchParams().set)
+  const createDate = Timestamp.fromDate(new Date(String(useLocalSearchParams().createDate)))
 
   const [weightValue, setWeightValue] = useState<string>(weight)
   const [setValue, setSetValue] = useState<string>(set)
@@ -104,7 +106,7 @@ const EditTraining = (): JSX.Element | null => {
         </View>
 
         <View style={styles.items}>
-          <Text style={styles.itemText}>重量</Text>
+          <Text style={styles.itemText}>回数</Text>
           <TextInput
             style={styles.itemInput}
             placeholder='回数'
@@ -119,7 +121,7 @@ const EditTraining = (): JSX.Element | null => {
         <View style={styles.buttons}>
           <TouchableOpacity
             style={styles.update}
-            onPress={() => { void onUpdate(id, date, parts, events, weightValue, setValue) }}
+            onPress={() => { void onUpdate(id, date, parts, events, weightValue, setValue, createDate) }}
           >
             <Text>更新</Text>
           </TouchableOpacity>

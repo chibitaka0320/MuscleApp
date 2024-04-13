@@ -1,6 +1,9 @@
+import { type Timestamp } from 'firebase/firestore'
+
 export interface Sets {
   set: number
   weight: number
+  createDate: Timestamp
   id?: string
 }
 
@@ -19,5 +22,6 @@ export interface FirebaseTraining {
   events: string
   set: number
   weight: number
+  createDate: Timestamp
   id: string
 }

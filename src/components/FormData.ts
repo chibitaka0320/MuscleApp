@@ -12,6 +12,7 @@ export const FormData = (data: FirebaseTraining[]): Parts[] => {
           sets: [{
             set: item.set,
             weight: item.weight,
+            createDate: item.createDate,
             id: item.id
           }]
         }]
@@ -24,6 +25,7 @@ export const FormData = (data: FirebaseTraining[]): Parts[] => {
           sets: [{
             set: item.set,
             weight: item.weight,
+            createDate: item.createDate,
             id: item.id
           }]
         })
@@ -31,6 +33,7 @@ export const FormData = (data: FirebaseTraining[]): Parts[] => {
         organizedArray[existingPartIndex].events[existingEventIndex].sets.push({
           set: item.set,
           weight: item.weight,
+          createDate: item.createDate,
           id: item.id
         })
       }

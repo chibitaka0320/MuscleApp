@@ -10,7 +10,7 @@ import { OblongButton } from '../../components/OblongButton'
 
 // firebase
 import { auth, db } from '../../config'
-import { addDoc, collection, getDocs } from 'firebase/firestore'
+import { Timestamp, addDoc, collection, getDocs } from 'firebase/firestore'
 
 // data
 import { eventMenu, partsMenu } from '../../data/TrainingMenu'
@@ -38,7 +38,8 @@ const handlePress = async (date: string, parts: string, events: string, weight: 
         parts,
         events,
         weight,
-        set
+        set,
+        createDate: Timestamp.now()
       })
       router.back()
       router.replace('home/training')

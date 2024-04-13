@@ -3,7 +3,7 @@ import { View, StyleSheet, FlatList, Text } from 'react-native'
 
 // firebase
 import { auth, db } from '../../config'
-import { collection, onSnapshot, query, where } from 'firebase/firestore'
+import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore'
 
 // types
 import { type Parts, type FirebaseTraining } from '../types/Training'
@@ -22,17 +22,18 @@ const Training = (props: Props): JSX.Element => {
   useEffect(() => {
     if (auth.currentUser === null) return
     const ref = collection(db, `users/${auth.currentUser.uid}/training`)
-    const q = query(ref, where('date', '==', date))
+    const q = query(ref, where('date', '==', date), orderBy('createDate'))
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const getTraining: FirebaseTraining[] = []
       snapshot.forEach((doc) => {
-        const { parts, events, set, weight } = doc.data()
+        const { parts, events, set, weight, createDate } = doc.data()
         getTraining.push({
           id: doc.id,
           parts,
           events,
           set,
-          weight
+          weight,
+          createDate
         })
       })
       setTrainingData(FormData(getTraining))
@@ -47,6 +48,8 @@ const Training = (props: Props): JSX.Element => {
           <FlatList
            data={trainingData}
            renderItem={({ item }) => <PartsItem data={item} date={date}/>}
+           ListFooterComponent={<View style={styles.footer}></View>}
+           showsVerticalScrollIndicator={false}
           />
           )
         : (
@@ -69,6 +72,9 @@ const styles = StyleSheet.create({
     height: 120,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  footer: {
+    height: 300
   }
 })
 

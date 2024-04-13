@@ -4,7 +4,7 @@ import { router } from 'expo-router'
 
 // firebase
 import { auth, db } from '../../config'
-import { collection, doc, onSnapshot, query, where } from 'firebase/firestore'
+import { collection, doc, onSnapshot, orderBy, query, where } from 'firebase/firestore'
 
 // types
 import { type EatingSumData, type EatingData, type EatingGoalPFC } from '../types/Eating'
@@ -20,8 +20,8 @@ interface Props {
 
 const FONTSIZE = 13
 const handlePress = (value: EatingData, date: string): void => {
-  const { id, name, total, protein, fat, carbo } = value
-  router.push({ pathname: 'edit/editEat', params: { date, id, name, total, protein, fat, carbo } })
+  const { id, name, total, protein, fat, carbo, createDate } = value
+  router.push({ pathname: 'edit/editEat', params: { date, id, name, total, protein, fat, carbo, createDate: createDate.toDate() } })
 }
 
 const Eating = (props: Props): JSX.Element => {
@@ -33,7 +33,7 @@ const Eating = (props: Props): JSX.Element => {
   useEffect(() => {
     if (auth.currentUser === null) return
     const ref = collection(db, `users/${auth.currentUser.uid}/eating`)
-    const q = query(ref, where('date', '==', date))
+    const q = query(ref, where('date', '==', date), orderBy('createDate'))
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const getEating: EatingData[] = []
       let sumTotal = 0
@@ -41,14 +41,15 @@ const Eating = (props: Props): JSX.Element => {
       let sumFat = 0
       let sumCarbo = 0
       snapshot.forEach((doc) => {
-        const { name, total, protein, fat, carbo } = doc.data() as EatingData
+        const { name, total, protein, fat, carbo, createDate } = doc.data() as EatingData
         getEating.push({
           id: doc.id,
           name,
           total,
           protein,
           fat,
-          carbo
+          carbo,
+          createDate
         })
         sumTotal += Number(total)
         sumProtein += calcProteinGram(total, protein)
@@ -108,6 +109,7 @@ const Eating = (props: Props): JSX.Element => {
                     <Text style={[styles.carbo, styles.headerValue]}>C</Text>
                   </View>
                 )}
+                ListFooterComponent={<View style={styles.footer}></View>}
                 scrollEnabled={false}
               />
             )
@@ -186,6 +188,9 @@ const styles = StyleSheet.create({
   carbo: {
     width: '14%',
     fontSize: FONTSIZE
+  },
+  footer: {
+    height: 300
   }
 })
 

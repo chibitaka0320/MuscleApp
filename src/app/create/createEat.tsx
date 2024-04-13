@@ -12,7 +12,7 @@ import { calcCarboGram, calcFatGram, calcKcal, calcProteinGram } from '../../com
 
 // firebase
 import { auth, db } from '../../config'
-import { addDoc, collection } from 'firebase/firestore'
+import { Timestamp, addDoc, collection } from 'firebase/firestore'
 
 const handlePress = async (date: string, name: string, total: string, protein: number, fat: number, carbo: number): Promise<void> => {
   if (auth.currentUser === null) { return }
@@ -35,7 +35,8 @@ const handlePress = async (date: string, name: string, total: string, protein: n
         total,
         protein,
         fat,
-        carbo
+        carbo,
+        createDate: Timestamp.now()
       })
       router.back()
       router.replace('home/eating')

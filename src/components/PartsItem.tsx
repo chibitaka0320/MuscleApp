@@ -10,14 +10,16 @@ interface Props {
 export const PartsItem = (props: Props): JSX.Element => {
   const { data, date } = props
   return (
-    <View style={styles.item}>
-      <View style={styles.itemPart}>
-        <Text style={styles.itemPartTitle}>{data.parts}</Text>
+    <View style={styles.container}>
+      <View style={styles.item}>
+        <View style={styles.itemPart}>
+          <Text style={styles.itemPartTitle}>{data.parts}</Text>
+        </View>
+        <FlatList
+          data={data.events}
+          renderItem={({ item }) => <EventsItem data={item} parts={data.parts} date={date}/>}
+          />
       </View>
-      <FlatList
-        data={data.events}
-        renderItem={({ item }) => <EventsItem data={item} parts={data.parts} date={date}/>}
-      />
     </View>
   )
 }

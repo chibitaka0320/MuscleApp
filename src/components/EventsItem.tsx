@@ -21,7 +21,15 @@ const onEventsPlus = (parts: string, events: string, date: string): void => {
 const onEdit = (parts: string, events: string, sets: Sets, date: string): void => {
   router.push({
     pathname: '/edit/editTraining',
-    params: { parts, events, date, ...sets }
+    params: {
+      parts,
+      events,
+      date,
+      weight: sets.weight,
+      set: sets.set,
+      createDate: sets.createDate.toDate(),
+      id: sets.id
+    }
   })
 }
 

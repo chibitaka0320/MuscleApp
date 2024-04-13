@@ -11,9 +11,17 @@ import { calcCarboGram, calcFatGram, calcKcal, calcProteinGram } from '../../com
 
 // firebase
 import { auth, db } from '../../config'
-import { deleteDoc, doc, setDoc } from 'firebase/firestore'
+import { Timestamp, deleteDoc, doc, setDoc } from 'firebase/firestore'
 
-const onUpdate = async (id: string, date: string, name: string, total: string, protein: number, fat: number, carbo: number): Promise<void> => {
+const onUpdate = async (
+  id: string,
+  date: string,
+  name: string,
+  total: string,
+  protein: number,
+  fat: number,
+  carbo: number,
+  createDate: Timestamp): Promise<void> => {
   if (auth.currentUser === null) { return }
   if (name === '') {
     Alert.alert('食事名を入力してください')
@@ -30,7 +38,8 @@ const onUpdate = async (id: string, date: string, name: string, total: string, p
         total,
         protein,
         fat,
-        carbo
+        carbo,
+        createDate
       })
       router.back()
       router.replace('home/eating')
@@ -78,6 +87,7 @@ const EditEat = (): JSX.Element | null => {
   const carbo = Number(useLocalSearchParams().carbo)
   const id = String(useLocalSearchParams().id)
   const date = String(useLocalSearchParams().date)
+  const createDate = Timestamp.fromDate(new Date(String(useLocalSearchParams().createDate)))
 
   const [name, setName] = useState<string>(getName)
   const [total, setTotal] = useState<string>(getTotal)
@@ -215,7 +225,7 @@ const EditEat = (): JSX.Element | null => {
         <View style={styles.buttons}>
           <TouchableOpacity
             style={styles.update}
-            onPress={() => { void onUpdate(id, date, name, total, proteinPer, fatPer, carboPer) }}
+            onPress={() => { void onUpdate(id, date, name, total, proteinPer, fatPer, carboPer, createDate) }}
           >
             <Text>更新</Text>
           </TouchableOpacity>

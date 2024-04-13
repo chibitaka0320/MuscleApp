@@ -1,3 +1,5 @@
+import { type Timestamp } from 'firebase/firestore'
+
 export interface EatingData {
   id: string
   name: string
@@ -5,6 +7,7 @@ export interface EatingData {
   protein: number
   fat: number
   carbo: number
+  createDate: Timestamp
 }
 
 export interface EatingSumData {

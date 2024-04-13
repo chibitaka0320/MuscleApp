@@ -40,7 +40,7 @@ const DeleteAccount = (): JSX.Element => {
               .catch((error: any) => { console.log(error, 'firestoreDel') })
 
             // ユーザーストレージ削除
-            listAll(listRef)
+            await listAll(listRef)
               .then((res) => {
                 res.prefixes.forEach((folderRef) => {
                   const path = folderRef.fullPath
@@ -62,8 +62,9 @@ const DeleteAccount = (): JSX.Element => {
               .catch((error: any) => { console.log(error) })
 
             // ユーザー削除
-            deleteUser(user)
+            await deleteUser(user)
               .then(() => {
+                console.log('deleteUser')
                 while (router.canGoBack()) {
                   router.back()
                 }

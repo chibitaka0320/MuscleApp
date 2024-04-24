@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ActionSheetIOS, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ActionSheetIOS, ActivityIndicator, Dimensions } from 'react-native'
 import { launchImageLibraryAsync } from 'expo-image-picker'
 import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 
@@ -14,6 +14,9 @@ import { doc, getDoc, setDoc } from 'firebase/firestore'
 
 // types
 import { type BodyUrl } from '../types/Body'
+
+const imageWidth = Dimensions.get('screen').width / 2.4
+const imageHeight = Dimensions.get('screen').height / 2.6
 
 const CreateBody = (): JSX.Element | null => {
   const [visible, setVisible] = useState<boolean>(false)
@@ -239,7 +242,7 @@ const styles = StyleSheet.create({
     marginTop: 60,
     marginBottom: 30,
     borderRadius: 5,
-    height: 280,
+    height: imageHeight,
     paddingHorizontal: 15,
     paddingVertical: 10,
     justifyContent: 'space-between',
@@ -257,8 +260,8 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   image: {
-    height: 230,
-    width: 175
+    height: '97%',
+    width: imageWidth
   },
   modalImage: {
     resizeMode: 'contain'

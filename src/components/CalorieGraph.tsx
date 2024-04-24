@@ -158,10 +158,10 @@ const styles = StyleSheet.create({
   },
   valueGoal: {
     fontWeight: 'bold',
-    width: '41%'
+    width: '42%'
   },
   bottomItemUnit: {
-    width: '25%',
+    width: '23%',
     fontSize: 12,
     textAlign: 'center'
   }

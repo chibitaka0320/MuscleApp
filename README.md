@@ -16,6 +16,9 @@
   - 目標の体重と期限を設定すると、自動で推奨摂取カロリーを計算。
  
 ## 機能
+| 新規登録 | ログイン | 情報登録 | 目標設定 |
+----|----|----|---- 
+| ![ユーザー新規登録](https://github.com/user-attachments/assets/b384631c-a654-4cdf-af83-4d6b71c0fb12) | ![ユーザーログイン](https://github.com/user-attachments/assets/5522ac41-b430-4d09-b32f-23a8f2c10f51) | ![ユーザー情報登録](https://github.com/user-attachments/assets/6abdb40c-d8ad-4c3c-b6f3-fecf8c5ba156) | ![ユーザー目標設定](https://github.com/user-attachments/assets/e7a52a2e-04b6-4445-9d16-cd215a4a2a87) |
 
 
 ## 開発の背景

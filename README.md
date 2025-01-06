@@ -41,9 +41,9 @@
 - **フレームワーク:** React Native（Expo）
 - **言語:** TypeScript
 - **バックエンド:** Firebase
-  - **Authentication:** 
-  - **Firestore Database:** 
-  - **Storage:**
+  - Authentication
+  - Firestore Database
+  - Storage
 
 ### DB設計
 ![image](https://github.com/user-attachments/assets/001468b0-662e-4dd5-80e9-25c9f12b3acb)
